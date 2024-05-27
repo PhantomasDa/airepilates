@@ -1,0 +1,397 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Registro de Usuarios</title>
+    <link rel="stylesheet" href="style/style.css">
+    <link rel="stylesheet" href="style/register.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;700;800&display=swap">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    
+</head>
+<style>
+    input::placeholder, select::placeholder {
+    font-family: 'Font Awesome 5 Free';
+    font-weight: 900;
+}
+
+input, select {
+    font-family: 'Font Awesome 5 Free', Arial, sans-serif; /* Asegúrate de incluir Font Awesome y una fuente de respaldo */
+}
+
+</style>
+<body>
+    <div id="menu"></div>
+    <div class="my-container-bg">
+    <div class="form-section" id="registerForm1">
+        <h2>Registro de Usuario</h2>
+        <form id="registerForm1Form">
+            <input type="text" id="nombre" name="nombre" placeholder="&#xf007; Nombre" data-icon="&#xf007;" required><br>
+            <span id="nombreError" class="error"></span><br>
+        
+            <input type="email" id="email" name="email" placeholder="&#xf0e0; Email" data-icon="&#xf0e0;" required><br>
+            <span id="emailError" class="error"></span><br>
+        
+            <input type="tel" id="telefono" name="telefono" placeholder="&#xf095; Teléfono" data-icon="&#xf095;" required><br>
+            <span id="telefonoError" class="error"></span><br>
+        
+            <input type="password" id="password" name="password" placeholder="&#xf023; Contraseña" data-icon="&#xf023;" required><br>
+            <span id="passwordError" class="error"></span><br>
+        
+            <input type="date" id="fecha_nacimiento" name="fecha_nacimiento" placeholder="&#xf133; Fecha de Nacimiento" data-icon="&#xf133;" required><br>
+            <span id="fechaNacimientoError" class="error"></span><br>
+        
+            <select id="genero" name="genero" required>
+                <option value="">&#xf228; Seleccione Género</option>
+                <option value="hombre">&#xf183; Hombre</option>
+                <option value="mujer">&#xf182; Mujer</option>
+                <option value="otro">&#xf228; Otro</option>
+            </select><br>
+            <span id="generoError" class="error"></span><br>
+        
+            <button type="button" class="button" onclick="submitForm()">Completar</button>
+        </form>
+        
+    </div>
+
+    <div class="form-section" id="registerForm2" style="display: none;">
+        <h2>Sube tu Foto de Perfil</h2>
+        <form id="registerForm2Form" enctype="multipart/form-data">
+            <input type="hidden" id="userId2" name="userId">
+            <label for="foto_perfil">Foto de Perfil:</label>
+            <input type="file" id="foto_perfil" name="foto_perfil" required><br><br>
+            <span id="fotoPerfilError" class="error"></span><br>
+            
+            <button type="button" class="button" onclick="submitForm2()">Continuar</button>
+        </form>
+    </div>
+
+    <div class="form-section" id="registerForm3" style="display: none;">
+        <h2>Cuestionario</h2>
+        <form id="registerForm3Form">
+            <input type="hidden" id="userId3" name="userId">
+            <label for="pregunta1">Lorem ipsum dolor sit amet?</label><br>
+            <select id="pregunta1" name="pregunta1" required>
+                <option value="">Seleccione</option>
+                <option value="si">Sí</option>
+                <option value="no">No</option>
+            </select><br><br>
+
+            <label for="pregunta2">Lorem ipsum dolor sit amet?</label><br>
+            <select id="pregunta2" name="pregunta2" required>
+                <option value="">Seleccione</option>
+                <option value="si">Sí</option>
+                <option value="no">No</option>
+            </select><br><br>
+
+            <label for="pregunta3">Lorem ipsum dolor sit amet?</label><br>
+            <select id="pregunta3" name="pregunta3" required>
+                <option value="">Seleccione</option>
+                <option value="si">Sí</option>
+                <option value="no">No</option>
+            </select><br><br>
+
+            <label for="pregunta4">Lorem ipsum dolor sit amet?</label><br>
+            <select id="pregunta4" name="pregunta4" required>
+                <option value="">Seleccione</option>
+                <option value="si">Sí</option>
+                <option value="no">No</option>
+            </select><br><br>
+            
+            <button type="button" class="button" onclick="submitForm3()">Continuar</button>
+        </form>
+    </div>
+
+    <div class="form-section" id="registerForm4" style="display: none;">
+        <h2>Información Adicional</h2>
+        <form id="registerForm4Form">
+            <input type="hidden" id="userId4" name="userId">
+            <label for="lesiones">Lesiones:</label>
+            <textarea id="lesiones" name="lesiones" rows="4" cols="50"></textarea><br><br>
+
+            <label for="motivacion">Motivaciones:</label>
+            <textarea id="motivacion" name="motivacion" rows="4" cols="50"></textarea><br><br>
+
+            <button type="button" class="button" onclick="submitForm4()">Continuar</button>
+        </form>
+    </div>
+
+    <div class="form-section" id="registerForm5" style="display: none;">
+        <h2>Selección de Paquete</h2>
+        <div id="packageOptions">
+            <div class="package-option" onclick="selectPackage('Paquete basico')">Paquete básico</div>
+            <div class="package-option" onclick="selectPackage('Paquete completo')">Paquete completo</div>
+            <div class="package-option" onclick="selectPackage('Paquete premium')">Paquete premium</div>
+        </div><br><br>
+
+        <div>
+            <p>Información de cuenta: Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
+            <form id="registerForm5Form" enctype="multipart/form-data">
+                <input type="hidden" id="userId5" name="userId">
+                <input type="hidden" id="paquete" name="paquete">
+                <label for="comprobante_pago">Comprobante de Pago:</label>
+                <input type="file" id="comprobante_pago" name="comprobante_pago" required><br><br>
+                <span id="comprobantePagoError" class="error"></span><br>
+                
+                <button type="button" class="button" onclick="submitForm5()">Verificar Pago</button>
+            </form>
+        </div>
+    </div>
+</div>
+    <div id="footer"></div>
+    <div id="sidebar-container"></div>
+
+    <script src="scripts/menu.js"></script>
+    <script src="scripts/register.js"></script>
+    <script>
+        function submitForm() {
+            const nombre = document.getElementById('nombre').value;
+            const email = document.getElementById('email').value;
+            const telefono = document.getElementById('telefono').value;
+            const password = document.getElementById('password').value;
+            const fecha_nacimiento = document.getElementById('fecha_nacimiento').value;
+            const genero = document.getElementById('genero').value;
+
+            if (nombre.length < 3) {
+                document.getElementById('nombreError').textContent = 'El nombre debe tener al menos 3 caracteres.';
+                return;
+            }
+
+            const emailPattern = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,6}$/;
+            if (!emailPattern.test(email)) {
+                document.getElementById('emailError').textContent = 'Por favor, ingrese un email válido.';
+                return;
+            }
+
+            if (telefono.length < 10) {
+                document.getElementById('telefonoError').textContent = 'Por favor, ingrese un teléfono válido.';
+                return;
+            }
+
+            if (password.length < 6) {
+                document.getElementById('passwordError').textContent = 'La contraseña debe tener al menos 6 caracteres.';
+                return;
+            }
+
+            if (!fecha_nacimiento) {
+                document.getElementById('fechaNacimientoError').textContent = 'Por favor, ingrese una fecha de nacimiento.';
+                return;
+            }
+
+            if (!genero) {
+                document.getElementById('generoError').textContent = 'Por favor, seleccione un género.';
+                return;
+            }
+
+            fetch('/register/step1', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ nombre, email, telefono, password, fecha_nacimiento, genero })
+            })
+            .then(response => {
+                if (!response.ok) {
+                    return response.json().then(err => { throw new Error(err.message); });
+                }
+                return response.json();
+            })
+            .then(data => {
+                if (data.message !== 'Datos principales guardados exitosamente') {
+                    document.getElementById('nombreError').textContent = data.message;
+                } else {
+                    // Avanzar al siguiente paso
+                    document.getElementById('registerForm1').style.display = 'none';
+                    document.getElementById('registerForm2').style.display = 'block';
+                    document.getElementById('userId2').value = data.userId; // Asignar el userId al segundo formulario
+                }
+            })
+            .catch(error => {
+                console.error('Error durante el registro:', error);
+                document.getElementById('nombreError').textContent = 'Error durante el registro';
+            });
+        }
+
+        function submitForm2() {
+            const form = document.getElementById('registerForm2Form');
+            const formData = new FormData(form);
+
+            fetch('/register/step2', {
+                method: 'POST',
+                body: formData
+            })
+            .then(response => {
+                if (!response.ok) {
+                    return response.json().then(err => { throw new Error(err.message); });
+                }
+                return response.json();
+            })
+            .then(data => {
+                if (data.message !== 'Foto de perfil actualizada exitosamente') {
+                    document.getElementById('fotoPerfilError').textContent = data.message;
+                } else {
+                    // Avanzar al siguiente paso
+                    document.getElementById('registerForm2').style.display = 'none';
+                    document.getElementById('registerForm3').style.display = 'block';
+                    document.getElementById('userId3').value = document.getElementById('userId2').value; // Asignar el userId al tercer formulario
+                }
+            })
+            .catch(error => {
+                console.error('Error durante la subida de la foto de perfil:', error);
+                document.getElementById('fotoPerfilError').textContent = 'Error durante la subida de la foto de perfil';
+            });
+        }
+
+        function submitForm3() {
+            const userId = document.getElementById('userId3').value;
+            const pregunta1 = document.getElementById('pregunta1').value;
+            const pregunta2 = document.getElementById('pregunta2').value;
+            const pregunta3 = document.getElementById('pregunta3').value;
+            const pregunta4 = document.getElementById('pregunta4').value;
+
+            if (!pregunta1 || !pregunta2 || !pregunta3 || !pregunta4) {
+                // Asegúrate de que todas las preguntas sean respondidas
+                return;
+            }
+
+            fetch('/register/step3', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ userId, pregunta1, pregunta2, pregunta3, pregunta4 })
+            })
+            .then(response => {
+                if (!response.ok) {
+                    return response.json().then(err => { throw new Error(err.message); });
+                }
+                return response.json();
+            })
+            .then(data => {
+                if (data.message !== 'Cuestionario guardado exitosamente') {
+                    document.getElementById('cuestionarioError').textContent = data.message;
+                } else {
+                    // Avanzar al siguiente paso
+                    document.getElementById('registerForm3').style.display = 'none';
+                    document.getElementById('registerForm4').style.display = 'block';
+                    document.getElementById('userId4').value = document.getElementById('userId3').value; // Asignar el userId al cuarto formulario
+                }
+            })
+            .catch(error => {
+                console.error('Error durante el cuestionario:', error);
+                document.getElementById('cuestionarioError').textContent = 'Error durante el cuestionario';
+            });
+        }
+
+        function submitForm4() {
+            const userId = document.getElementById('userId4').value;
+            const lesiones = document.getElementById('lesiones').value;
+            const motivacion = document.getElementById('motivacion').value;
+
+            fetch('/register/step4', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ userId, lesiones, motivacion })
+            })
+            .then(response => {
+                if (!response.ok) {
+                    return response.json().then(err => { throw new Error(err.message); });
+                }
+                return response.json();
+            })
+            .then(data => {
+                if (data.message !== 'Registro completado exitosamente') {
+                    document.getElementById('finalError').textContent = data.message;
+                } else {
+                    // Avanzar al siguiente paso
+                    document.getElementById('registerForm4').style.display = 'none';
+                    document.getElementById('registerForm5').style.display = 'block';
+                    document.getElementById('userId5').value = document.getElementById('userId4').value; // Asignar el userId al quinto formulario
+                }
+            })
+            .catch(error => {
+                console.error('Error durante la finalización del registro:', error);
+                document.getElementById('finalError').textContent = 'Error durante la finalización del registro';
+            });
+        }
+
+        function selectPackage(paquete) {
+            document.getElementById('paquete').value = paquete;
+            const packageOptions = document.querySelectorAll('.package-option');
+            packageOptions.forEach(option => option.classList.remove('selected'));
+            document.querySelector(`[onclick="selectPackage('${paquete}')"]`).classList.add('selected');
+        }
+
+        function submitForm5() {
+    const form = document.getElementById('registerForm5Form');
+    const formData = new FormData(form);
+
+    fetch('/register/step5', {
+        method: 'POST',
+        body: formData
+    })
+    .then(response => {
+        if (!response.ok) {
+            return response.json().then(err => { throw new Error(err.message); });
+        }
+        return response.json();
+    })
+    .then(data => {
+        if (data.message !== 'Verificación de pago exitosa') {
+            document.getElementById('comprobantePagoError').textContent = data.message;
+        } else {
+            // Redirigir al usuario a la página de inicio de sesión
+            window.location.href = '/login';
+            alert('Registro completado. Por favor, ingresa con tu usuario y clave.');
+        }
+    })
+    .catch(error => {
+        console.error('Error durante la verificación del pago:', error);
+        document.getElementById('comprobantePagoError').textContent = 'Error durante la verificación del pago';
+    });
+}
+
+
+        function loadComponent(id, url, callback) {
+            fetch(url)
+                .then(response => response.text())
+                .then(data => {
+                    document.getElementById(id).innerHTML = data;
+                    if (callback) callback();
+                })
+                .catch(error => console.error('Error loading component:', error));
+        }
+
+        document.addEventListener("DOMContentLoaded", function() {
+            loadComponent('menu', 'menu.html', initializeMenu);
+            loadComponent('footer', 'footer.html');
+            loadComponent('sidebar-container', 'sidebar.html');
+
+            function initializeMenu() {
+                const toggleButton = document.getElementById('navbar-toggle');
+                const closeButton = document.getElementById('close-button');
+                const fullscreenMenu = document.getElementById('fullscreen-menu');
+
+                if (toggleButton && closeButton && fullscreenMenu) {
+                    toggleButton.addEventListener('click', () => {
+                        fullscreenMenu.classList.add('open');
+                    });
+
+                    closeButton.addEventListener('click', () => {
+                        fullscreenMenu.classList.remove('open');
+                    });
+                }
+            }
+        });
+
+        document.addEventListener("DOMContentLoaded", function() {
+        loadComponent('menu', 'menu.html', initializeMenu);
+        loadComponent('footer', 'footer.html');
+        loadComponent('sidebar-container', 'sidebar.html');
+    });
+    </script>
+</body>
+</html>

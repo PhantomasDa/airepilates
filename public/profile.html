@@ -1,0 +1,512 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Perfil de Usuario</title>
+    <link rel="stylesheet" href="style/style.css">
+    <link rel="stylesheet" href="style/profile.css">
+    <link href='https://cdn.jsdelivr.net/npm/fullcalendar@5.10.1/main.min.css' rel='stylesheet' />
+    <script src='https://cdn.jsdelivr.net/npm/fullcalendar@5.10.1/main.min.js'></script>
+</head>
+<body>
+    <div id="menu"></div>
+    <div class="my-container-bg">
+        <div class="container-data">
+            <h1 id="user_name">Bienvenido, [Nombre del Usuario]</h1>
+            <a id="logout" href="#" onclick="logout()">Logout</a>
+            <div id="profile_container">
+                <img id="profile_picture" src="ruta/a/la/foto/de/perfil.jpg" alt="Foto de perfil">
+              
+            </div>
+        </div>
+            
+
+        <div id="horariosPopup" class="popup">
+            <div class="popup-content">
+                <h2>Horarios Disponibles</h2>
+                <div id="horariosContenido"></div>
+                <button onclick="cerrarHorariosPopup()">Cerrar</button>
+            </div>
+        </div>
+        <h2 class="color-ajuste margin-ajuste">Tus Horarios Disponibles</h2>
+        <div id="clases_disponibles"></div>
+
+
+        <div id="calendario" class="calendar-container"></div>
+        <h2 class="color-ajuste">Tus Próximas Clases</h2>
+        <h4 class="color-ajuste margin-ajuste">Puedes reagendar tus clases maximo 2 veces</h4>
+        <div id="proximas_clases" class="toggle-content"></div>
+
+
+       
+
+      
+
+        <div id="reservaPopup" class="popup">
+            <div class="popup-content">
+                <h2 class="color-ajuste">Reservar Clase</h2>
+                <input type="hidden" id="claseId">
+                <p class="color-ajuste">Detalles de la clase y opciones para confirmar la reserva.</p>
+                <button onclick="cerrarPopup()">Cerrar</button>
+                <button id="confirmarReservaBtn" onclick="confirmarReserva()">Reservar Clase Ahora</button>
+            </div>
+        </div>
+        
+
+       
+
+        <div id="confirmationModal" class="modal">
+            <div class="modal-content">
+                <h2>Felicitaciones!</h2>
+                <p id="confirmationText">Tu clase ha sido reservada.</p>
+                <button onclick="cerrarYRecargar()">Cerrar</button>
+            </div>
+        </div>
+        
+
+         <div id="errorModal" class="modal">
+            <div class="modal-content">
+                <h2>Lo sentimos!</h2>
+                <p id="errorText">Solo puedes registrarte una vez por clase, recuerda que puedes reagendar con 24 horas de anticipación.</p>
+                <button onclick="cerrarErrorModal()">Volver</button>
+            </div>
+        </div>
+
+        <div id="sameDayErrorModal" class="modal">
+            <div class="modal-content">
+                <h2>Lo sentimos!</h2>
+                <p id="sameDayErrorText">Ya tienes una clase registrada en esta fecha.</p>
+                <button onclick="cerrarSameDayErrorModal()">Volver</button>
+            </div>
+        </div>
+
+        <div id="dateErrorModal" class="modal">
+            <div class="modal-content">
+                <h2>Lo sentimos!</h2>
+                <p id="dateErrorText">No se pueden reservar clases para fechas anteriores al día siguiente.</p>
+                <button onclick="cerrarDateErrorModal()">Volver</button>
+            </div>
+        </div>
+
+        <div id="reagendarPopup" class="modal">
+            <div class="modal-content">
+                <button onclick="cerrarReagendarPopup()" class="close-button">&times;</button>
+                <h2>Reagendar Clase</h2>
+                <div id="claseActualMensaje" style="margin-bottom: 20px;"></div>
+                <div id="fechasReagendar"></div>
+            </div>
+        </div>
+    </div>
+    <div id="footer"></div>
+
+    <script>
+     document.addEventListener('DOMContentLoaded', () => {
+    initPage();
+});
+
+function initPage() {
+    actualizarClasesDisponibles();
+    cargarProximasClases();
+    cargarNombreUsuario();
+    inicializarCalendario();
+}
+
+function inicializarCalendario() {
+    const calendarEl = document.getElementById('calendario');
+    const calendar = new FullCalendar.Calendar(calendarEl, {
+        initialView: 'dayGridMonth',
+        locale: 'es',
+        validRange: {
+            start: new Date() // Empieza desde hoy
+        },
+        initialDate: new Date(), // La fecha inicial mostrada es hoy
+        headerToolbar: {
+            left: 'prev,next today',
+            center: 'title',
+            right: ''
+        },
+        buttonText: {
+            today: 'Hoy'
+        },
+        dateClick: (info) => {
+            cargarHorarios(info.dateStr);
+            document.querySelectorAll('.fc-daygrid-day.selected-date').forEach(date => date.classList.remove('selected-date'));
+            info.dayEl.classList.add('selected-date');
+        }
+    });
+    calendar.render();
+}
+
+
+
+        function fetchData(url, options = {}) {
+            options.headers = {
+                ...options.headers,
+                'Authorization': 'Bearer ' + localStorage.getItem('token')
+            };
+            return fetch(url, options).then(response => {
+                if (!response.ok) throw response.json().then(error => new Error(error.message));
+                return response.json();
+            });
+        }
+
+        function cargarNombreUsuario() {
+            fetchData('/perfil/usuario')
+                .then(usuario => {
+                    document.getElementById('user_name').textContent = `Bienvenido, ${usuario.nombre}`;
+                    document.getElementById('profile_picture').src = usuario.foto_perfil;
+                })
+                .catch(error => console.error('Error al cargar el nombre del usuario:', error));
+        }
+
+        function cargarProximasClases() {
+            fetchData('/perfil/proximas-clases')
+                .then(clases => {
+                    const proximasClasesDiv = document.getElementById('proximas_clases');
+                    proximasClasesDiv.innerHTML = clases.length === 0 
+                        ? '<p>No tienes clases reservadas.</p>' 
+                        : clases.map(clase => {
+                            const fechaClase = new Date(clase.fecha_hora);
+                            const diaSemana = fechaClase.toLocaleDateString('es-ES', { weekday: 'long' });
+                            const fechaFormateada = `${diaSemana} ${fechaClase.toLocaleDateString('es-ES')} ${fechaClase.toLocaleTimeString('es-ES', { hour: '2-digit', minute: '2-digit' })}`;
+                            return `<div>Fecha: ${fechaFormateada} <button onclick="reagendarClase(${clase.id})">Reagendar Clase</button></div>`;
+                        }).join('');
+                })
+                .catch(error => console.error('Error al cargar las próximas clases:', error));
+        }
+
+        function cargarHorarios(fecha) {
+    fetchData(`/perfil/horarios?fecha=${fecha}`)
+        .then(clases => {
+            const horariosContenido = document.getElementById('horariosContenido');
+            horariosContenido.innerHTML = clases.map(clase => {
+                const fechaClase = new Date(clase.fecha_hora).toLocaleString();
+                return `<div>Horario: ${fechaClase} - Cupos Disponibles: ${clase.cupos_disponibles} <button onclick="reservarCupo(${clase.id}, '${fechaClase}')">Reservar Cupo</button></div>`;
+            }).join('');
+            document.getElementById('horariosPopup').classList.add('active');
+        })
+        .catch(error => console.error('Error al cargar los horarios:', error));
+}
+
+function cerrarHorariosPopup() {
+    document.getElementById('horariosPopup').classList.remove('active');
+}
+
+        function cerrarPopup() {
+            document.getElementById('reservaPopup').style.bottom = '-100%';
+        }
+
+        function reservarCupo(claseId, fechaClase) {
+    if (clasesDisponibles > 0) {
+        const popup = document.getElementById('reservaPopup');
+        document.getElementById('claseId').value = claseId;
+        document.querySelector('#reservaPopup p').textContent = `Qué emoción, vas a reservar tu clase para ${fechaClase}, recuerda que puedes cancelar con 24 horas de anticipación :)`;
+        popup.classList.add('active');
+    } else {
+        alert('No tienes clases disponibles para reservar.');
+    }
+}
+
+function cerrarPopup() {
+    document.getElementById('reservaPopup').classList.remove('active');
+}
+function confirmarReserva() {
+    const claseId = document.getElementById('claseId').value;
+    fetchData('/perfil/reservar', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ claseId })
+    })
+    .then(data => {
+        const fechaFormateada = new Date(data.fecha).toLocaleDateString('es-ES', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' });
+        document.getElementById('confirmationText').textContent = `Felicitaciones! Tu clase ha sido reservada para ${fechaFormateada}.`;
+        mostrarModal('confirmationModal');
+        cerrarPopup(); // Cerrar el popup de reserva
+    })
+    .catch(error => manejarErrorReserva(error));
+}
+
+function cerrarYRecargar() {
+    cerrarModal('confirmationModal');
+    location.reload(); // Recargar la página
+}
+
+function cerrarTodosLosPopups() {
+    const popups = document.querySelectorAll('.popup, .modal');
+    popups.forEach(popup => {
+        popup.style.display = 'none';
+    });
+}
+
+function manejarErrorReserva(error) {
+    console.error('Error al reservar la clase:', error);
+    switch (error.message) {
+        case 'No se pueden reservar clases para fechas anteriores al día siguiente':
+            mostrarModal('dateErrorModal');
+            break;
+        case 'Ya tienes una clase registrada en esta fecha':
+            mostrarModal('sameDayErrorModal');
+            break;
+        case 'Ya estás registrado en esta clase':
+            mostrarModal('errorModal');
+            break;
+        default:
+            alert('Error al reservar la clase: ' + error.message);
+    }
+}
+
+function mostrarModal(modalId) {
+    document.getElementById(modalId).style.display = 'block';
+}
+
+function cerrarModal(modalId) {
+    document.getElementById(modalId).style.display = 'none';
+}
+
+function cerrarReagendarPopup() {
+    cerrarModal('reagendarPopup');
+}
+
+
+function cerrarTodosLosPopups() {
+    const popups = document.querySelectorAll('.popup, .modal');
+    popups.forEach(popup => {
+        popup.style.display = 'none';
+    });
+}
+
+function manejarErrorReserva(error) {
+    console.error('Error al reservar la clase:', error);
+    switch (error.message) {
+        case 'No se pueden reservar clases para fechas anteriores al día siguiente':
+            mostrarModal('dateErrorModal');
+            break;
+        case 'Ya tienes una clase registrada en esta fecha':
+            mostrarModal('sameDayErrorModal');
+            break;
+        case 'Ya estás registrado en esta clase':
+            mostrarModal('errorModal');
+            break;
+        default:
+            alert('Error al reservar la clase: ' + error.message);
+    }
+}
+
+function mostrarModal(modalId) {
+    document.getElementById(modalId).style.display = 'block';
+}
+
+function cerrarModal(modalId) {
+    document.getElementById(modalId).style.display = 'none';
+}
+
+function cerrarReagendarPopup() {
+    cerrarModal('reagendarPopup');
+}
+
+
+        function manejarErrorReserva(error) {
+            console.error('Error al reservar la clase:', error);
+            switch (error.message) {
+                case 'No se pueden reservar clases para fechas anteriores al día siguiente':
+                    mostrarDateErrorModal();
+                    break;
+                case 'Ya tienes una clase registrada en esta fecha':
+                    mostrarSameDayErrorModal();
+                    break;
+                case 'Ya estás registrado en esta clase':
+                    mostrarErrorModal();
+                    break;
+                default:
+                    alert('Error al reservar la clase: ' + error.message);
+            }
+        }
+
+        function actualizarClasesDisponibles() {
+            fetchData('/perfil/clases-disponibles')
+                .then(data => {
+                    clasesDisponibles = data.clases_disponibles;
+                    document.getElementById('clases_disponibles').textContent = `Número de clases disponibles: ${clasesDisponibles}`;
+                })
+                .catch(error => {
+                    console.error('Error al cargar las clases disponibles:', error);
+                    document.getElementById('clases_disponibles').textContent = 'Error al cargar las clases disponibles';
+                });
+        }
+
+        function reagendarClase(claseId) {
+            fetchData(`/perfil/proximas-clases`)
+                .then(clases => {
+                    const claseActual = clases.find(clase => clase.id === claseId);
+                    if (claseActual) {
+                        const fechaObj = new Date(claseActual.fecha_hora);
+                        const diaSemana = fechaObj.toLocaleDateString('es-ES', { weekday: 'long' });
+                        const fechaFormateada = `${diaSemana} ${fechaObj.toLocaleDateString('es-ES')} ${fechaObj.toLocaleTimeString('es-ES')}`;
+                        document.getElementById('claseActualMensaje').innerHTML = `Vas a reagendar tu clase del <span class="fecha">${fechaFormateada}</span>`;
+                    }
+                })
+                .catch(error => console.error('Error al obtener la fecha de la clase actual:', error));
+
+            fetchData(`/perfil/fechas-reagendar/${claseId}`)
+                .then(fechas => {
+                    const fechasReagendarDiv = document.getElementById('fechasReagendar');
+                    fechasReagendarDiv.innerHTML = '';
+
+                    fechas.forEach(fecha => {
+                        const fechaObj = new Date(fecha.fecha_hora);
+                        const diaSemana = fechaObj.toLocaleDateString('es-ES', { weekday: 'long' });
+                        const fechaFormateada = `${diaSemana} ${fechaObj.toLocaleDateString('es-ES')} ${fechaObj.toLocaleTimeString('es-ES')}`;
+                        fechasReagendarDiv.innerHTML += `
+                            <div class="fecha-container">
+                                <div>Fecha: <span class="fecha">${fechaFormateada}</span></div>
+                                <div>Cupos disponibles: ${fecha.cupos_disponibles}</div>
+                                <button onclick="confirmarReagendar(${claseId}, '${fecha.fecha_hora}')">Reagendar</button>
+                            </div>
+                        `;
+                    });
+                    document.getElementById('reagendarPopup').style.display = 'block';
+                })
+                .catch(error => console.error('Error al obtener fechas para reagendar:', error));
+        }
+
+        function confirmarReagendar(claseId, nuevaFecha) {
+            console.log('Reagendando clase', claseId, 'a la nueva fecha', nuevaFecha);
+            fetch('/perfil/reagendar', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': 'Bearer ' + localStorage.getItem('token')
+                },
+                body: JSON.stringify({ claseId, nuevaFecha: new Date(nuevaFecha).toISOString() })
+            })
+            .then(response => {
+                if (!response.ok) {
+                    return response.json().then(error => { throw new Error(error.message); });
+                }
+                return response.json();
+            })
+            .then(data => {
+                alert(data.message);
+                cerrarReagendarPopup();
+                cargarProximasClases();
+            })
+            .catch(error => {
+                console.error('Error al reagendar la clase:', error);
+                alert('Error al reagendar la clase: ' + error.message);
+            });
+        }
+
+        function cerrarReagendarPopup() {
+            document.getElementById('reagendarPopup').style.display = 'none';
+        }
+
+        function mostrarModal() {
+            document.getElementById('confirmationModal').style.display = 'block';
+        }
+
+        function cerrarModal() {
+            document.getElementById('confirmationModal').style.display = 'none';
+            actualizarClasesDisponibles();
+            cargarProximasClases();
+        }
+
+        function mostrarErrorModal() {
+            document.getElementById('errorModal').style.display = 'block';
+        }
+
+        function cerrarErrorModal() {
+            document.getElementById('errorModal').style.display = 'none';
+            actualizarClasesDisponibles();
+            cargarProximasClases();
+        }
+
+        function mostrarSameDayErrorModal() {
+            document.getElementById('sameDayErrorModal').style.display = 'block';
+        }
+
+        function cerrarSameDayErrorModal() {
+            document.getElementById('sameDayErrorModal').style.display = 'none';
+            cargarProximasClases();
+        }
+
+        function mostrarDateErrorModal() {
+            document.getElementById('dateErrorModal').style.display = 'block';
+            cargarProximasClases();
+        }
+
+        function cerrarDateErrorModal() {
+            document.getElementById('dateErrorModal').style.display = 'none';
+        }
+
+        function logout() {
+            localStorage.removeItem('token');
+            window.location.href = '/';
+        }
+
+        function loadComponent(id, url, callback) {
+            fetch(url)
+                .then(response => response.text())
+                .then(data => {
+                    document.getElementById(id).innerHTML = data;
+                    if (callback) callback();
+                })
+                .catch(error => console.error('Error loading component:', error));
+        }
+
+        document.addEventListener("DOMContentLoaded", function() {
+            loadComponent('menu', 'menu.html', initializeMenu);
+            loadComponent('footer', 'footer.html');
+            loadComponent('sidebar-container', 'sidebar.html');
+
+            function initializeMenu() {
+                const toggleButton = document.getElementById('navbar-toggle');
+                const closeButton = document.getElementById('close-button');
+                const fullscreenMenu = document.getElementById('fullscreen-menu');
+
+                if (toggleButton && closeButton && fullscreenMenu) {
+                    toggleButton.addEventListener('click', () => {
+                        fullscreenMenu.classList.add('open');
+                    });
+
+                    closeButton.addEventListener('click', () => {
+                        fullscreenMenu.classList.remove('open');
+                    });
+                }
+            }
+        });
+
+        function toggleProximasClases() {
+    const proximasClasesDiv = document.getElementById('proximas_clases');
+    proximasClasesDiv.classList.toggle('active');
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+    const header = document.createElement('div');
+    header.classList.add('toggle-header');
+    header.textContent = 'Ver/ocultar próximas clases';
+    header.onclick = toggleProximasClases;
+
+    const proximasClasesContainer = document.getElementById('proximas_clases');
+    proximasClasesContainer.parentNode.insertBefore(header, proximasClasesContainer);
+});
+function login() {
+    const email = document.getElementById('email').value;
+    const password = document.getElementById('password').value;
+
+    fetch('/auth/login', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email, password })
+    })
+    .then(response => response.json())
+    .then(data => {
+        localStorage.setItem('token', data.accessToken);
+        window.location.href = '/profile.html';
+    })
+    .catch(error => console.error('Error al iniciar sesión:', error));
+}
+
+    </script>
+</body>
+</html>

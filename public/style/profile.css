@@ -1,0 +1,263 @@
+.color-ajuste, #user_name, .color-correction, #errorText, #sameDayErrorText , #dateErrorText, #confirmationText{
+    color: black !important;
+}
+
+#reservaPopup {
+    position: fixed;
+    bottom: -100%;
+    left: 0;
+    width: 100%;
+    background-color: white;
+    transition: bottom 0.3s;
+    box-shadow: 0 -2px 10px rgba(0,0,0,0.2);
+}
+#errorModal, #confirmationModal, #reservaPopup, #reagendarPopup {
+    z-index: 99999;
+}
+#calendario {
+    max-width: 60vw;
+    max-height: 60vh;
+}
+.selected-date {
+    background-color: #ffcc00; /* Color de fondo para la fecha seleccionada */
+}
+#horariosSlidebar {
+    position: fixed;
+    top: 0;
+    right: -100%;
+    width: 300px;
+    height: 100%;
+    background-color: white;
+    box-shadow: -2px 0 5px rgba(0, 0, 0, 0.5);
+    transition: right 0.3s;
+    z-index: 10000;
+    padding: 20px;
+}
+#horariosSlidebar h2 {
+    margin-top: 0;
+}
+#horariosSlidebar button {
+    margin-top: 20px;
+}
+#reagendarPopup .fecha-container {
+display: flex;
+flex-direction: column;
+margin-bottom: 10px;
+padding: 10px;
+border-bottom: 1px solid #ccc;
+}
+
+#reagendarPopup .fecha-container > * {
+margin-bottom: 5px;
+}
+
+#reagendarPopup .fecha-container button {
+width: 100px;
+padding: 5px;
+font-size: 14px;
+cursor: pointer;
+}
+
+#reagendarPopup .fecha-container div {
+display: flex;
+justify-content: space-between;
+align-items: center;
+}
+
+.fecha {
+font-weight: bold;
+}
+
+#profile_container {
+display: flex;
+align-items: center;
+margin-top: 10px;
+}
+
+#profile_picture {
+width: 50px;
+height: 50px;
+border-radius: 50%;
+margin-right: 10px;
+}
+
+#logout {
+color: blue;
+text-decoration: underline;
+cursor: pointer;
+}
+@media only screen and (max-width: 600px) {
+    #user_name{
+        font-size: 18px !important;
+    }
+
+    /* Estilos para el contenido del acordeón */
+.toggle-header {
+    cursor: pointer;
+    padding: 10px;
+    background-color: #7F5B41;
+    color: #FBF7F2;
+    font-weight: bold;
+    text-align: center;
+    margin-bottom: 5px;
+    border-radius: 5px;
+}
+
+.toggle-content {
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.3s ease-out;
+}
+
+.toggle-content.active {
+    max-height: 1000px; /* Ajusta este valor según sea necesario */
+    transition: max-height 0.5s ease-in;
+}
+
+.fc .fc-toolbar-title{
+    font-size: 20px !important;
+}
+.fc{
+    font-size: 10px !important;
+}
+
+
+/* Estilos para el popup centrado */
+.popup {
+    display: none;
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: white;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    z-index: 10000;
+    width: 90%;
+    max-width: 400px;
+}
+
+.popup.active {
+    display: block;
+}
+
+.popup-content {
+    max-height: 80vh;
+    overflow-y: auto;
+}
+
+#reservaPopup {
+    display: none;
+    position: fixed;
+    bottom: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    background-color: white;
+    padding: 20px;
+    border-radius: 10px 10px 0 0;
+    box-shadow: 0 -4px 8px rgba(0, 0, 0, 0.1);
+    z-index: 10001;
+    width: 100%;
+    max-width: 400px;
+}
+
+#reservaPopup.active {
+    display: block;
+}
+#calendario{
+    max-width: 90vw;
+}
+
+/* Estilos para el contenedor del calendario */
+.calendar-container {
+    display: flex;
+    justify-content: center;
+    margin: 20px 0;
+}
+
+/* Estilos específicos para FullCalendar */
+.fc {
+    width: 100%;
+    max-width: 100%;
+}
+
+.fc-toolbar {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 10px;
+}
+
+.fc-button {
+    background-color: #7F5B41;
+    border: none;
+    color: #FBF7F2;
+    padding: 5px 10px;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.fc-button:hover {
+    background-color: #6C4A31;
+}
+
+.fc-button:focus {
+    outline: none;
+    box-shadow: none;
+}
+
+.fc-button-group .fc-button {
+    margin: 0;
+}
+
+.fc .fc-toolbar-title {
+    font-size: 1.5em;
+    color: #14110F;
+}
+
+.fc-daygrid-day-number {
+    color: #14110F;
+}
+
+.fc-daygrid-day {
+    background-color: #FBF7F2;
+}
+
+.fc-day-today {
+    background-color: #EAEAEA !important;
+}
+
+.fc-daygrid-day.fc-day-past {
+    background-color: #F5F5F5;
+    color: #BEBEBE;
+}
+
+.fc-col-header-cell-cushion {
+    font-size: 1em;
+    color: #14110F;
+}
+
+.fc-scrollgrid {
+    border: none;
+}
+
+
+.container-data{
+    display: flex;
+    flex-direction: column-reverse;
+    justify-content: center;
+    align-items: center;
+}
+
+.margin-ajuste{
+    margin: 0px;
+}
+}
+
+.navbar{
+    margin-left: 0 !important;
+}
+
+.my-container-bg{
+    margin: 10px;
+}
