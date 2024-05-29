@@ -96,14 +96,28 @@ router.post('/step4', async (req, res) => {
     }
 });
 
-// Paso 5: Guardar Paquete y Comprobante de Pago
-router.post('/step5', upload.single('comprobante_pago'), async (req, res) => {
+// Paso 5: Guardar Modalidad
+router.post('/step5', async (req, res) => {
+    const { userId, modalidad_online, modalidad_presencial } = req.body;
+
+    if (!userId || (!modalidad_online && !modalidad_presencial)) {
+        return res.status(400).send({ message: 'Todos los campos son obligatorios' });
+    }
+
+    try {
+        await db.execute('UPDATE Usuarios SET modalidad_online = ?, modalidad_presencial = ? WHERE id = ?', [modalidad_online, modalidad_presencial, userId]);
+
+        res.status(200).send({ message: 'Modalidad guardada exitosamente' });
+    } catch (error) {
+        console.error('Error al guardar modalidad:', error);
+        res.status(500).send({ message: 'Error al guardar modalidad' });
+    }
+});
+
+// Paso 6: Guardar Paquete y Comprobante de Pago
+router.post('/step6', upload.single('comprobante_pago'), async (req, res) => {
     const { userId, paquete } = req.body;
     const comprobantePago = req.file ? req.file.filename : null;
-
-    console.log('userId:', userId);
-    console.log('paquete:', paquete);
-    console.log('comprobantePago:', comprobantePago);
 
     if (!userId || !paquete || !comprobantePago) {
         return res.status(400).send({ message: 'Todos los campos son obligatorios' });
@@ -127,11 +141,28 @@ router.post('/step5', upload.single('comprobante_pago'), async (req, res) => {
     try {
         await db.execute('UPDATE Usuarios SET paquete = ?, comprobante_pago = ?, clases_disponibles = ? WHERE id = ?', [paquete, comprobantePago, clasesDisponibles, userId]);
 
-        // Enviar solo una respuesta
         res.status(200).json({ message: 'Verificación de pago exitosa' });
     } catch (error) {
         console.error('Error al guardar paquete y comprobante de pago:', error);
         res.status(500).send({ message: 'Error al guardar paquete y comprobante de pago' });
+    }
+});
+
+// Paso 7: Guardar Datos de Facturación
+router.post('/billing', async (req, res) => {
+    const { usuario_id, cedula_ruc, direccion1, direccion2, telefono, nombre_completo, razon_social, otro_dato } = req.body;
+
+    if (!usuario_id || !cedula_ruc || !direccion1 || !telefono || !nombre_completo) {
+        return res.status(400).send({ message: 'Todos los campos obligatorios menos direccion2 y razon_social' });
+    }
+
+    try {
+        await db.execute('INSERT INTO Datos_de_facturacion (usuario_id, cedula_ruc, direccion1, direccion2, telefono, nombre_completo, razon_social, otro_dato) VALUES (?, ?, ?, ?, ?, ?, ?, ?)', [usuario_id, cedula_ruc, direccion1, direccion2, telefono, nombre_completo, razon_social, otro_dato]);
+
+        res.status(200).send({ message: 'Datos de facturación guardados exitosamente' });
+    } catch (error) {
+        console.error('Error al insertar datos de facturación:', error);
+        res.status(500).send({ message: 'Error al insertar datos de facturación' });
     }
 });
 

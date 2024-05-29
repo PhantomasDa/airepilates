@@ -5,140 +5,230 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Registro de Usuarios</title>
     <link rel="stylesheet" href="style/style.css">
-    <link rel="stylesheet" href="style/register.css">
+
+    <link rel="stylesheet" href="./style/estilosformularios.css">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;700;800&display=swap">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
-    
 </head>
 <style>
     input::placeholder, select::placeholder {
-    font-family: 'Font Awesome 5 Free';
-    font-weight: 900;
+        font-family: 'Montserrat';
+        font-weight: 900;
+    }
+
+.package-option {
+    padding: 10px;
+    margin: 5px;
+    border: 1px solid #ccc;
+    cursor: pointer;
 }
 
-input, select {
-    font-family: 'Font Awesome 5 Free', Arial, sans-serif; /* Asegúrate de incluir Font Awesome y una fuente de respaldo */
+.package-option.selected {
+    background-color: #f0f0f0;
+    border-color: #000;
 }
+
+#packageDescription {
+    margin-top: 20px;
+}
+
+#packageDescription h3 {
+    margin-bottom: 10px;
+}
+
+#packageDescription p {
+    font-size: 16px;
+    line-height: 1.5;
+}
+#packageText
+{
+    color: #000;
+}
+.form-section-bg{
+    display: block;
+    min-height: 832px;
+}
+.my-container-bg{
+  background-image: url('./content/bg.png');
+  background-size: cover; /* Ajusta el tamaño de la imagen para cubrir toda el área */
+  background-position: center; /* Centra la imagen en el contenedor */
+  background-repeat: no-repeat; /* Evita que la imagen se repita */
+  margin-left: 30px;
+    text-align: center;
+}
+
 
 </style>
 <body>
     <div id="menu"></div>
     <div class="my-container-bg">
-    <div class="form-section" id="registerForm1">
-        <h2>Registro de Usuario</h2>
-        <form id="registerForm1Form">
-            <input type="text" id="nombre" name="nombre" placeholder="&#xf007; Nombre" data-icon="&#xf007;" required><br>
-            <span id="nombreError" class="error"></span><br>
-        
-            <input type="email" id="email" name="email" placeholder="&#xf0e0; Email" data-icon="&#xf0e0;" required><br>
-            <span id="emailError" class="error"></span><br>
-        
-            <input type="tel" id="telefono" name="telefono" placeholder="&#xf095; Teléfono" data-icon="&#xf095;" required><br>
-            <span id="telefonoError" class="error"></span><br>
-        
-            <input type="password" id="password" name="password" placeholder="&#xf023; Contraseña" data-icon="&#xf023;" required><br>
-            <span id="passwordError" class="error"></span><br>
-        
-            <input type="date" id="fecha_nacimiento" name="fecha_nacimiento" placeholder="&#xf133; Fecha de Nacimiento" data-icon="&#xf133;" required><br>
-            <span id="fechaNacimientoError" class="error"></span><br>
-        
-            <select id="genero" name="genero" required>
-                <option value="">&#xf228; Seleccione Género</option>
-                <option value="hombre">&#xf183; Hombre</option>
-                <option value="mujer">&#xf182; Mujer</option>
-                <option value="otro">&#xf228; Otro</option>
-            </select><br>
-            <span id="generoError" class="error"></span><br>
-        
-            <button type="button" class="button" onclick="submitForm()">Completar</button>
-        </form>
-        
-    </div>
-
-    <div class="form-section" id="registerForm2" style="display: none;">
-        <h2>Sube tu Foto de Perfil</h2>
-        <form id="registerForm2Form" enctype="multipart/form-data">
-            <input type="hidden" id="userId2" name="userId">
-            <label for="foto_perfil">Foto de Perfil:</label>
-            <input type="file" id="foto_perfil" name="foto_perfil" required><br><br>
-            <span id="fotoPerfilError" class="error"></span><br>
+        <div class="form-section-bg" id="registerForm1">
+            <h2 style="margin: 0;">Registro de Usuario</h2>
+            <form id="registerForm1Form">
+                <input type="text" id="nombre" name="nombre" placeholder=" Nombre"  required><br>
+                <span id="nombreError" class="error"></span><br>
             
-            <button type="button" class="button" onclick="submitForm2()">Continuar</button>
-        </form>
-    </div>
-
-    <div class="form-section" id="registerForm3" style="display: none;">
-        <h2>Cuestionario</h2>
-        <form id="registerForm3Form">
-            <input type="hidden" id="userId3" name="userId">
-            <label for="pregunta1">Lorem ipsum dolor sit amet?</label><br>
-            <select id="pregunta1" name="pregunta1" required>
-                <option value="">Seleccione</option>
-                <option value="si">Sí</option>
-                <option value="no">No</option>
-            </select><br><br>
-
-            <label for="pregunta2">Lorem ipsum dolor sit amet?</label><br>
-            <select id="pregunta2" name="pregunta2" required>
-                <option value="">Seleccione</option>
-                <option value="si">Sí</option>
-                <option value="no">No</option>
-            </select><br><br>
-
-            <label for="pregunta3">Lorem ipsum dolor sit amet?</label><br>
-            <select id="pregunta3" name="pregunta3" required>
-                <option value="">Seleccione</option>
-                <option value="si">Sí</option>
-                <option value="no">No</option>
-            </select><br><br>
-
-            <label for="pregunta4">Lorem ipsum dolor sit amet?</label><br>
-            <select id="pregunta4" name="pregunta4" required>
-                <option value="">Seleccione</option>
-                <option value="si">Sí</option>
-                <option value="no">No</option>
-            </select><br><br>
+                <input type="email" id="email" name="email" placeholder="Email"  required><br>
+                <span id="emailError" class="error"></span><br>
             
-            <button type="button" class="button" onclick="submitForm3()">Continuar</button>
-        </form>
-    </div>
+                <input type="tel" id="telefono" name="telefono" placeholder=" Teléfono" required><br>
+                <span id="telefonoError" class="error"></span><br>
+            
+                <input type="password" id="password" name="password" placeholder=" Contraseña"  required><br>
+                <span id="passwordError" class="error"></span><br>
 
-    <div class="form-section" id="registerForm4" style="display: none;">
-        <h2>Información Adicional</h2>
-        <form id="registerForm4Form">
-            <input type="hidden" id="userId4" name="userId">
-            <label for="lesiones">Lesiones:</label>
-            <textarea id="lesiones" name="lesiones" rows="4" cols="50"></textarea><br><br>
-
-            <label for="motivacion">Motivaciones:</label>
-            <textarea id="motivacion" name="motivacion" rows="4" cols="50"></textarea><br><br>
-
-            <button type="button" class="button" onclick="submitForm4()">Continuar</button>
-        </form>
-    </div>
-
-    <div class="form-section" id="registerForm5" style="display: none;">
-        <h2>Selección de Paquete</h2>
-        <div id="packageOptions">
-            <div class="package-option" onclick="selectPackage('Paquete basico')">Paquete básico</div>
-            <div class="package-option" onclick="selectPackage('Paquete completo')">Paquete completo</div>
-            <div class="package-option" onclick="selectPackage('Paquete premium')">Paquete premium</div>
-        </div><br><br>
-
-        <div>
-            <p>Información de cuenta: Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
-            <form id="registerForm5Form" enctype="multipart/form-data">
-                <input type="hidden" id="userId5" name="userId">
-                <input type="hidden" id="paquete" name="paquete">
-                <label for="comprobante_pago">Comprobante de Pago:</label>
-                <input type="file" id="comprobante_pago" name="comprobante_pago" required><br><br>
-                <span id="comprobantePagoError" class="error"></span><br>
+                <input type="password" id="confirm_password" name="confirm_password" placeholder="Confirmar clave"  required><br>
+                    <span id="confirmPasswordError" class="error"></span><br>
                 
-                <button type="button" class="button" onclick="submitForm5()">Verificar Pago</button>
+                <input type="date" id="fecha_nacimiento" name="fecha_nacimiento" required><br>
+                <span id="fechaNacimientoError" class="error"></span><br>
+            
+                <select id="genero" name="genero" required>
+                    <option value=""> Genero</option>
+                    <option value="hombre"> Hombre</option>
+                    <option value="mujer">Mujer</option>
+                    <option value="otro"> Otro</option>
+                </select><br>
+                <span id="generoError" class="error"></span><br>
+            
+                <button type="button" class="button" onclick="submitForm()">Completar</button>
+            </form>
+        </div>
+
+        <div class="form-section-bg" id="registerForm2" style="display: none;">
+            <h2>Sube tu Foto de Perfil</h2>
+            <form id="registerForm2Form" enctype="multipart/form-data">
+                <input type="hidden" id="userId2" name="userId">
+                <label for="foto_perfil">Foto de Perfil:</label>
+                <input type="file" id="foto_perfil" name="foto_perfil" required><br><br>
+                <span id="fotoPerfilError" class="error"></span><br>
+                
+                <button type="button" class="button" onclick="submitForm2()">Continuar</button>
+            </form>
+        </div>
+
+        <div class="form-section-bg" id="registerForm3" style="display: none;">
+            <h2>Cuestionario</h2>
+            <form id="registerForm3Form">
+                <input type="hidden" id="userId3" name="userId">
+                <label for="pregunta1">Lorem ipsum dolor sit amet?</label><br>
+                <select id="pregunta1" name="pregunta1" required>
+                    <option value="">Seleccione</option>
+                    <option value="si">Sí</option>
+                    <option value="no">No</option>
+                </select><br><br>
+
+                <label for="pregunta2">Lorem ipsum dolor sit amet?</label><br>
+                <select id="pregunta2" name="pregunta2" required>
+                    <option value="">Seleccione</option>
+                    <option value="si">Sí</option>
+                    <option value="no">No</option>
+                </select><br><br>
+
+                <label for="pregunta3">Lorem ipsum dolor sit amet?</label><br>
+                <select id="pregunta3" name="pregunta3" required>
+                    <option value="">Seleccione</option>
+                    <option value="si">Sí</option>
+                    <option value="no">No</option>
+                </select><br><br>
+
+                <label for="pregunta4">Lorem ipsum dolor sit amet?</label><br>
+                <select id="pregunta4" name="pregunta4" required>
+                    <option value="">Seleccione</option>
+                    <option value="si">Sí</option>
+                    <option value="no">No</option>
+                </select><br><br>
+                
+                <button type="button" class="button" onclick="submitForm3()">Continuar</button>
+            </form>
+        </div>
+
+        <div class="form-section-bg" id="registerForm4" style="display: none;">
+            <h2>Información Adicional</h2>
+            <form id="registerForm4Form">
+                <input type="hidden" id="userId4" name="userId">
+                <label for="lesiones">Lesiones:</label>
+                <textarea id="lesiones" name="lesiones" rows="4" cols="50"></textarea><br><br>
+
+                <label for="motivacion">Motivaciones:</label>
+                <textarea id="motivacion" name="motivacion" rows="4" cols="50"></textarea><br><br>
+
+                <button type="button" class="button" onclick="submitForm4()">Continuar</button>
+            </form>
+        </div>
+
+        <div class="form-section-bg" id="registerForm5" style="display: none;">
+            <h2>Escoger Modalidad</h2>
+            <form id="registerForm5Form">
+                <input type="hidden" id="userId5" name="userId">
+                <label for="modalidad">Modalidad:</label>
+                <select id="modalidad" name="modalidad" required>
+                    <option value="">Seleccione Modalidad</option>
+                    <option value="online">ONLINE</option>
+                    <option value="presencial">PRESENCIAL</option>
+                </select><br><br>
+                <span id="modalidadError" class="error"></span><br>
+                <button type="button" class="button" onclick="submitForm5()">Continuar</button>
+            </form>
+        </div>
+
+        <div class="form-section-bg" id="registerForm6" style="display: none;">
+            <h2>Selección de Paquete</h2>
+            <div id="packageOptions">
+                <div class="package-option" data-package="Paquete básico" onclick="selectPackage('Paquete básico')">Paquete básico</div>
+                <div class="package-option" data-package="Paquete completo" onclick="selectPackage('Paquete completo')">Paquete completo</div>
+                <div class="package-option" data-package="Paquete premium" onclick="selectPackage('Paquete premium')">Paquete premium</div>
+            </div><br><br>
+        
+            <div id="packageDescription">
+                <h3>Descripción del Paquete</h3>
+                <p id="packageText">Seleccione un paquete para ver la descripción.</p>
+            </div><br><br>
+        
+            <div>
+                <p>Información de cuenta: Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
+                <form id="registerForm6Form" enctype="multipart/form-data">
+                    <input type="hidden" id="userId6" name="userId">
+                    <input type="hidden" id="paquete" name="paquete">
+                    <label for="comprobante_pago">Comprobante de Pago:</label>
+                    <input type="file" id="comprobante_pago" name="comprobante_pago" required><br><br>
+                    <span id="comprobantePagoError" class="error"></span><br>
+                    
+                    <button type="button" class="button" onclick="submitForm6()">Verificar Pago</button>
+                </form>
+            </div>
+        </div>
+        
+
+        <div class="form-section-bg" id="registerForm7" style="display: none;">
+            <h2>Datos de Facturación</h2>
+            <form id="registerForm7Form">
+                <input type="hidden" id="usuario_id_billing" name="usuario_id">
+                <label for="cedula_ruc">Cédula o RUC:</label>
+                <input type="text" id="cedula_ruc" name="cedula_ruc" placeholder="Cedula o Ruc" required><br><br>
+                
+                <label for="direccion1">Dirección 1:</label>
+                <input type="text" id="direccion1" name="direccion1" placeholder="Direccion" required><br><br>
+                
+                <label for="direccion2">Dirección 2:</label>
+                <input type="text" id="direccion2" name="direccion2" placeholder="Direcion 2"><br><br>
+                
+                <label for="telefono_billing">Teléfono:</label>
+                <input type="text" id="telefono_billing" name="telefono"  placeholder="telefono"><br><br>
+                
+                <label for="nombre_completo">Nombre Completo:</label>
+                <input type="text" id="nombre_completo" name="nombre_completo" placeholder=" Nombre completo" required><br><br>
+                
+                <label for="razon_social">Razón Social:</label>
+                <input type="text" id="razon_social" name="razon_social" placeholder="Razon Social"><br><br>
+                
+                <label for="otro_dato">Otro Dato:</label>
+                <input type="text" id="otro_dato" name="otro_dato" placeholder="extra"><br><br>
+                
+                <button type="button" class="button" onclick="submitBillingForm()">Continuar</button>
             </form>
         </div>
     </div>
-</div>
     <div id="footer"></div>
     <div id="sidebar-container"></div>
 
@@ -146,72 +236,79 @@ input, select {
     <script src="scripts/register.js"></script>
     <script>
         function submitForm() {
-            const nombre = document.getElementById('nombre').value;
-            const email = document.getElementById('email').value;
-            const telefono = document.getElementById('telefono').value;
-            const password = document.getElementById('password').value;
-            const fecha_nacimiento = document.getElementById('fecha_nacimiento').value;
-            const genero = document.getElementById('genero').value;
+    const nombre = document.getElementById('nombre').value;
+    const email = document.getElementById('email').value;
+    const telefono = document.getElementById('telefono').value;
+    const password = document.getElementById('password').value;
+    const confirm_password = document.getElementById('confirm_password').value;
+    const fecha_nacimiento = document.getElementById('fecha_nacimiento').value;
+    const genero = document.getElementById('genero').value;
 
-            if (nombre.length < 3) {
-                document.getElementById('nombreError').textContent = 'El nombre debe tener al menos 3 caracteres.';
-                return;
-            }
+    if (nombre.length < 3) {
+        document.getElementById('nombreError').textContent = 'El nombre debe tener al menos 3 caracteres.';
+        return;
+    }
 
-            const emailPattern = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,6}$/;
-            if (!emailPattern.test(email)) {
-                document.getElementById('emailError').textContent = 'Por favor, ingrese un email válido.';
-                return;
-            }
+    const emailPattern = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,6}$/;
+    if (!emailPattern.test(email)) {
+        document.getElementById('emailError').textContent = 'Por favor, ingrese un email válido.';
+        return;
+    }
 
-            if (telefono.length < 10) {
-                document.getElementById('telefonoError').textContent = 'Por favor, ingrese un teléfono válido.';
-                return;
-            }
+    if (telefono.length < 10) {
+        document.getElementById('telefonoError').textContent = 'Por favor, ingrese un teléfono válido.';
+        return;
+    }
 
-            if (password.length < 6) {
-                document.getElementById('passwordError').textContent = 'La contraseña debe tener al menos 6 caracteres.';
-                return;
-            }
+    if (password.length < 6) {
+        document.getElementById('passwordError').textContent = 'La contraseña debe tener al menos 6 caracteres.';
+        return;
+    }
 
-            if (!fecha_nacimiento) {
-                document.getElementById('fechaNacimientoError').textContent = 'Por favor, ingrese una fecha de nacimiento.';
-                return;
-            }
+    if (password !== confirm_password) {
+        document.getElementById('confirmPasswordError').textContent = 'Las contraseñas no coinciden.';
+        return;
+    }
 
-            if (!genero) {
-                document.getElementById('generoError').textContent = 'Por favor, seleccione un género.';
-                return;
-            }
+    if (!fecha_nacimiento) {
+        document.getElementById('fechaNacimientoError').textContent = 'Por favor, ingrese una fecha de nacimiento.';
+        return;
+    }
 
-            fetch('/register/step1', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({ nombre, email, telefono, password, fecha_nacimiento, genero })
-            })
-            .then(response => {
-                if (!response.ok) {
-                    return response.json().then(err => { throw new Error(err.message); });
-                }
-                return response.json();
-            })
-            .then(data => {
-                if (data.message !== 'Datos principales guardados exitosamente') {
-                    document.getElementById('nombreError').textContent = data.message;
-                } else {
-                    // Avanzar al siguiente paso
-                    document.getElementById('registerForm1').style.display = 'none';
-                    document.getElementById('registerForm2').style.display = 'block';
-                    document.getElementById('userId2').value = data.userId; // Asignar el userId al segundo formulario
-                }
-            })
-            .catch(error => {
-                console.error('Error durante el registro:', error);
-                document.getElementById('nombreError').textContent = 'Error durante el registro';
-            });
+    if (!genero) {
+        document.getElementById('generoError').textContent = 'Por favor, seleccione un género.';
+        return;
+    }
+
+    fetch('/register/step1', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ nombre, email, telefono, password, fecha_nacimiento, genero })
+    })
+    .then(response => {
+        if (!response.ok) {
+            return response.json().then(err => { throw new Error(err.message); });
         }
+        return response.json();
+    })
+    .then(data => {
+        if (data.message !== 'Datos principales guardados exitosamente') {
+            document.getElementById('nombreError').textContent = data.message;
+        } else {
+            // Avanzar al siguiente paso
+            document.getElementById('registerForm1').style.display = 'none';
+            document.getElementById('registerForm2').style.display = 'block';
+            document.getElementById('userId2').value = data.userId; // Asignar el userId al segundo formulario
+        }
+    })
+    .catch(error => {
+        console.error('Error durante el registro:', error);
+        document.getElementById('nombreError').textContent = 'Error durante el registro';
+    });
+}
+
 
         function submitForm2() {
             const form = document.getElementById('registerForm2Form');
@@ -318,18 +415,74 @@ input, select {
             });
         }
 
-        function selectPackage(paquete) {
-            document.getElementById('paquete').value = paquete;
-            const packageOptions = document.querySelectorAll('.package-option');
-            packageOptions.forEach(option => option.classList.remove('selected'));
-            document.querySelector(`[onclick="selectPackage('${paquete}')"]`).classList.add('selected');
+        function submitForm5() {
+            const modalidad = document.getElementById('modalidad').value;
+            const userId = document.getElementById('userId5').value;
+
+            if (!modalidad) {
+                document.getElementById('modalidadError').textContent = 'Por favor, seleccione una modalidad.';
+                return;
+            }
+
+            const modalidad_online = (modalidad === 'online') ? 'si' : 'no';
+            const modalidad_presencial = (modalidad === 'presencial') ? 'si' : 'no';
+
+            fetch('/register/step5', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ userId, modalidad_online, modalidad_presencial })
+            })
+            .then(response => {
+                if (!response.ok) {
+                    return response.json().then(err => { throw new Error(err.message); });
+                }
+                return response.json();
+            })
+            .then(data => {
+                if (data.message !== 'Modalidad guardada exitosamente') {
+                    document.getElementById('modalidadError').textContent = data.message;
+                } else {
+                    document.getElementById('registerForm5').style.display = 'none';
+                    document.getElementById('registerForm6').style.display = 'block';
+                    document.getElementById('userId6').value = document.getElementById('userId5').value;
+                }
+            })
+            .catch(error => {
+                console.error('Error durante la selección de modalidad:', error);
+                document.getElementById('modalidadError').textContent = 'Error durante la selección de modalidad';
+            });
         }
 
-        function submitForm5() {
-    const form = document.getElementById('registerForm5Form');
+        function selectPackage(paquete) {
+    document.getElementById('paquete').value = paquete;
+    const packageOptions = document.querySelectorAll('.package-option');
+    packageOptions.forEach(option => option.classList.remove('selected'));
+    document.querySelector(`[data-package="${paquete}"]`).classList.add('selected');
+
+    // Mostrar la descripción del paquete seleccionado
+    const packageText = document.getElementById('packageText');
+    switch(paquete) {
+        case 'Paquete básico':
+            packageText.textContent = 'Descripción del Paquete básico: Lorem ipsum dolor sit amet, consectetur adipiscing elit.';
+            break;
+        case 'Paquete completo':
+            packageText.textContent = 'Descripción del Paquete completo: Lorem ipsum dolor sit amet, consectetur adipiscing elit.';
+            break;
+        case 'Paquete premium':
+            packageText.textContent = 'Descripción del Paquete premium: Lorem ipsum dolor sit amet, consectetur adipiscing elit.';
+            break;
+        default:
+            packageText.textContent = 'Seleccione un paquete para ver la descripción.';
+    }
+}
+
+function submitForm6() {
+    const form = document.getElementById('registerForm6Form');
     const formData = new FormData(form);
 
-    fetch('/register/step5', {
+    fetch('/register/step6', {
         method: 'POST',
         body: formData
     })
@@ -343,9 +496,9 @@ input, select {
         if (data.message !== 'Verificación de pago exitosa') {
             document.getElementById('comprobantePagoError').textContent = data.message;
         } else {
-            // Redirigir al usuario a la página de inicio de sesión
-            window.location.href = '/login';
-            alert('Registro completado. Por favor, ingresa con tu usuario y clave.');
+            document.getElementById('registerForm6').style.display = 'none';
+            document.getElementById('registerForm7').style.display = 'block';
+            document.getElementById('usuario_id_billing').value = document.getElementById('userId6').value;
         }
     })
     .catch(error => {
@@ -354,6 +507,72 @@ input, select {
     });
 }
 
+
+function submitForm6() {
+    const form = document.getElementById('registerForm6Form');
+    const formData = new FormData(form);
+
+    fetch('/register/step6', {
+        method: 'POST',
+        body: formData
+    })
+    .then(response => {
+        if (!response.ok) {
+            return response.json().then(err => { throw new Error(err.message); });
+        }
+        return response.json();
+    })
+    .then(data => {
+        if (data.message !== 'Verificación de pago exitosa') {
+            document.getElementById('comprobantePagoError').textContent = data.message;
+        } else {
+            document.getElementById('registerForm6').style.display = 'none';
+            document.getElementById('registerForm7').style.display = 'block';
+            document.getElementById('usuario_id_billing').value = document.getElementById('userId6').value;
+        }
+    })
+    .catch(error => {
+        console.error('Error durante la verificación del pago:', error);
+        document.getElementById('comprobantePagoError').textContent = 'Error durante la verificación del pago';
+    });
+}
+        function submitBillingForm() {
+            const usuario_id = document.getElementById('usuario_id_billing').value;
+            const cedula_ruc = document.getElementById('cedula_ruc').value;
+            const direccion1 = document.getElementById('direccion1').value;
+            const direccion2 = document.getElementById('direccion2').value;
+            const telefono = document.getElementById('telefono_billing').value;
+            const nombre_completo = document.getElementById('nombre_completo').value;
+            const razon_social = document.getElementById('razon_social').value;
+            const otro_dato = document.getElementById('otro_dato').value;
+
+            fetch('/register/billing', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ usuario_id, cedula_ruc, direccion1, direccion2, telefono, nombre_completo, razon_social, otro_dato })
+            })
+            .then(response => {
+                if (!response.ok) {
+                    return response.json().then(err => { throw new Error(err.message); });
+                }
+                return response.json();
+            })
+            .then(data => {
+                if (data.message !== 'Datos de facturación guardados exitosamente') {
+                    document.getElementById('billingError').textContent = data.message;
+                } else {
+                    // Registro completado
+                    window.location.href = '/login';
+                    alert('Registro completado. Por favor, ingresa con tu usuario y clave.');
+                }
+            })
+            .catch(error => {
+                console.error('Error durante la inserción de datos de facturación:', error);
+                document.getElementById('billingError').textContent = 'Error durante la inserción de datos de facturación';
+            });
+        }
 
         function loadComponent(id, url, callback) {
             fetch(url)
@@ -386,12 +605,6 @@ input, select {
                 }
             }
         });
-
-        document.addEventListener("DOMContentLoaded", function() {
-        loadComponent('menu', 'menu.html', initializeMenu);
-        loadComponent('footer', 'footer.html');
-        loadComponent('sidebar-container', 'sidebar.html');
-    });
     </script>
 </body>
 </html>

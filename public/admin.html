@@ -36,19 +36,19 @@
     <h2>Usuarios</h2>
     <div id="filtros">
         <h3>Selecciona los campos a mostrar:</h3>
-        <div  style="display: block;">
-        <input type="checkbox" value="nombre" checked> <span> Nombre</span>
-        <input type="checkbox" value="email" checked> Email
-        <input type="checkbox" value="fecha_registro"> Fecha Registro
-        <input type="checkbox" value="paquete"> Paquete
-        <input type="checkbox" value="clases_disponibles"> Clases Disponibles
-        <input type="checkbox" value="telefono"> Teléfono
-        <input type="checkbox" value="motivacion"> Motivación
-        <input type="checkbox" value="fecha_nacimiento"> Fecha Nacimiento
-        <input type="checkbox" value="genero"> Género
-        <input type="checkbox" value="comprobante_pago"> Comprobante Pago
-        <input type="checkbox" value="rol"> Rol
-    </div>
+        <div style="display: block;">
+            <input type="checkbox" value="nombre" checked> <span>Nombre</span>
+            <input type="checkbox" value="email" checked> Email
+            <input type="checkbox" value="fecha_registro"> Fecha Registro
+            <input type="checkbox" value="paquete"> Paquete
+            <input type="checkbox" value="clases_disponibles"> Clases Disponibles
+            <input type="checkbox" value="telefono"> Teléfono
+            <input type="checkbox" value="motivacion"> Motivación
+            <input type="checkbox" value="fecha_nacimiento"> Fecha Nacimiento
+            <input type="checkbox" value="genero"> Género
+            <input type="checkbox" value="comprobante_pago"> Comprobante Pago
+            <input type="checkbox" value="rol"> Rol
+        </div>
     </div>
     <button onclick="cargarUsuarios()">Cargar Usuarios</button>
     <div id="usuarios">
@@ -173,36 +173,40 @@
         }
 
         function guardarCambiosUsuarios() {
-    const inputs = document.querySelectorAll('#tabla_usuarios input[data-field]');
-    const cambios = Array.from(inputs).map(input => ({
-        id: input.getAttribute('data-id'),
-        field: input.getAttribute('data-field'),
-        value: input.value
-    }));
+            const inputs = document.querySelectorAll('#tabla_usuarios input[data-field]');
+            const cambios = Array.from(inputs).map(input => ({
+                id: input.getAttribute('data-id'),
+                field: input.getAttribute('data-field'),
+                value: input.value
+            }));
 
-    fetchData('/admin/actualizar-usuarios', {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({ cambios })
-    })
-        .then(response => {
-            alert('Cambios guardados correctamente');
-        })
-        .catch(error => {
-            console.error('Error al guardar cambios:', error);
-            alert('Error al guardar cambios');
-        });
-}
-
+            fetchData('/admin/actualizar-usuarios', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ cambios })
+            })
+                .then(response => {
+                    alert('Cambios guardados correctamente');
+                })
+                .catch(error => {
+                    console.error('Error al guardar cambios:', error);
+                    alert('Error al guardar cambios');
+                });
+        }
 
         function loadComponent(id, url, callback) {
             fetch(url)
                 .then(response => response.text())
                 .then(data => {
-                    document.getElementById(id).innerHTML = data;
-                    if (callback) callback();
+                    const element = document.getElementById(id);
+                    if (element) {
+                        element.innerHTML = data;
+                        if (callback) callback();
+                    } else {
+                        console.error(`Elemento con id "${id}" no encontrado.`);
+                    }
                 })
                 .catch(error => console.error('Error loading component:', error));
         }
@@ -229,5 +233,6 @@
             }
         });
     </script>
+
 </body>
 </html>

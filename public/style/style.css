@@ -360,7 +360,7 @@ body {
 }
 
 .about a {
-    color: #1E90FF; /* Color azul para el enlace */
+    color: #fff; /* Color azul para el enlace */
     text-decoration: none;
 }
 
@@ -654,7 +654,7 @@ body {
 /* Contenedor del formulario */
 .form-section {
     width: 100%;
-    max-width: 290px; /* Ajustar el tamaño según tus necesidades */
+    max-width: 250px; /* Ajustar el tamaño según tus necesidades */
     margin: 20px 70px;
     padding: 20px;
     background-color: rgba(255, 255, 255, 0.9); /* Fondo blanco semitransparente */
@@ -692,7 +692,7 @@ input[type="text"]::before,
 input[type="tel"]::before,
 input[type="date"]::before {
     content: attr(data-icon);
-    font-family: "Font Awesome 5 Free";
+    font-family: "Monserrate";
     font-weight: 900;
     position: absolute;
     left: 15px;
@@ -728,6 +728,7 @@ input[type="date"]::before {
 @media (max-width: 600px) {
     .form-section {
         padding: 10px;
+        margin-bottom: 210px;
     }
 
     h2 {

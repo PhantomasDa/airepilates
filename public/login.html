@@ -2,29 +2,34 @@
 <html lang="es">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Login</title>
+    <link rel="stylesheet" href="style/style.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;700;800&display=swap">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link rel="stylesheet" href="./style/estilosformularios.css">
 </head>
-<link rel="stylesheet" href="style/style.css">
-<link rel="stylesheet" href="style/register.css">
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;700;800&display=swap">
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
 <body>
     <div id="menu"></div>
+    <div class="my-container-bg">
+        <div class="form-section-bg">
+            <div class="container-data">
+                <h2 id="user_name">Ingresa</h2>
+                <form id="loginForm">
+                    <label for="email">Email:</label>
+                    <input type="email" id="email" name="email" placeholder="Email" required><br><br>
 
-    <h2>Ingresa</h2>
-    <form id="loginForm">
-        <label for="email">Email:</label>
-        <input type="email" id="email" name="email" required><br><br>
+                    <label for="password">Contraseña:</label>
+                    <input type="password" id="password" name="password" placeholder="Contraseña" required><br><br>
 
-        <label for="password">Contraseña:</label>
-        <input type="password" id="password" name="password" required><br><br>
-
-        <button type="submit">Iniciar Sesión</button>
-    </form>
+                    <button type="submit">Iniciar Sesión</button>
+                </form>
+            </div>
+        </div>
+    </div>
+    <div id="sidebar-container"></div>
     <div id="footer"></div>
     <script>
-
-
         document.getElementById('loginForm').addEventListener('submit', function(event) {
             event.preventDefault();
 
@@ -41,10 +46,8 @@
             .then(response => response.json())
             .then(data => {
                 if (data.token) {
-                    // Guardar el token en almacenamiento local o en cookies
                     localStorage.setItem('token', data.token);
-                    // Redirigir al perfil del usuario o a otra página
-                    window.location.href = '/profile';  // Asegúrate de que esta ruta exista en tu servidor
+                    window.location.href = '/profile';
                 } else {
                     alert('Login fallido: ' + data.message);
                 }
@@ -85,23 +88,6 @@
                     });
                 }
             }
-        });
-
-        document.addEventListener("DOMContentLoaded", function() {
-        loadComponent('menu', 'menu.html', initializeMenu);
-        loadComponent('footer', 'footer.html');
-        loadComponent('sidebar-container', 'sidebar.html');
-    });
-
-        document.addEventListener("DOMContentLoaded", function() {
-            const toggleButton = document.getElementById('navbar-toggle');
-            const navbarLinks = document.getElementById('navbar-links');
-
-            toggleButton.addEventListener('click', () => {
-                for (let i = 0; i < navbarLinks.children.length; i++) {
-                    navbarLinks.children[i].style.display = navbarLinks.children[i].style.display === 'block' ? 'none' : 'block';
-                }
-            });
         });
     </script>
 </body>
