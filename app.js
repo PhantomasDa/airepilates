@@ -83,7 +83,7 @@ app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 
 // Ruta de bienvenida
 app.get('/', (req, res) => {
-    res.send('Bienvenido a Aire Pilates');
+    res.sendFile(path.join(__dirname, 'public', 'home.html'));
 });
 
 // Ruta de registro

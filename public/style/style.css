@@ -674,7 +674,7 @@ input, select, textarea {
     padding: 10px 20px;
     margin-bottom: 20px;
     border: 1px solid #CCC;
-    border-radius: 30px; /* Bordes redondeados */
+    border-radius: 10px; /* Bordes redondeados */
     box-sizing: border-box;
     background-color: #FFF;
     font-size: 14px;

@@ -16,21 +16,23 @@ const generateToken = (user) => {
 function verifyToken(req, res, next) {
     const token = req.headers.authorization?.split(' ')[1];
     if (!token) {
-        return res.status(401).send('No autorizado');
+        return res.redirect('/login');
     }
     try {
         const decoded = jwt.verify(token, JWT_SECRET);
+        console.log('Token verificado:', decoded);
         req.user = decoded;  // Guardar usuario decodificado en la solicitud para su uso posterior
         next();
     } catch (error) {
         console.error('Error verificando token:', error);
-        res.status(401).send({ message: 'Token inválido', error: error.message });
+        return res.redirect('/login');
     }
 }
 
+
 // Middleware para verificar si el usuario está autenticado mediante sesión
 const isAuthenticated = (req, res, next) => {
-    if (req.session.user) {
+    if (req.session && req.session.user) {
         return next();
     } else {
         req.flash('error', 'Debes iniciar sesión para acceder a esta página');
@@ -43,8 +45,10 @@ router.post('/login', (req, res) => {
     const { username, password } = req.body;
     // Aquí deberías verificar las credenciales del usuario...
     if (username === 'user' && password === 'password') {
-        req.session.user = { username: 'user' }; // Configura los datos de la sesión
-        res.redirect('/profile');
+        const user = { id: 1, username: 'user', email: 'user@example.com', rol: 'user' }; // Datos de ejemplo
+        const token = generateToken(user); // Generar el token
+        req.session.user = user; // Configura los datos de la sesión
+        res.json({ token }); // Enviar el token al cliente
     } else {
         req.flash('error', 'Credenciales incorrectas');
         res.redirect('/login');

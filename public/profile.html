@@ -507,6 +507,36 @@ function login() {
     .catch(error => console.error('Error al iniciar sesión:', error));
 }
 
+document.addEventListener('DOMContentLoaded', function() {
+    const token = localStorage.getItem('token');
+    if (!token) {
+        window.location.href = '/login.html'; // Redirigir al login si no hay token
+        return;
+    }
+
+    fetch('http://localhost:3000/profile', {
+        method: 'GET',
+        headers: {
+            'Authorization': 'Bearer ' + token
+        }
+    })
+    .then(response => {
+        if (response.status === 401) {
+            window.location.href = '/login.html'; // Redirigir a la página de login si no autorizado
+        } else {
+            return response.json();
+        }
+    })
+    .then(data => {
+        if (data) {
+            console.log(data); // Mostrar los datos del perfil
+            // Aquí puedes agregar el código para mostrar la información del usuario en la página
+        }
+    })
+    .catch(error => console.error('Error:', error));
+});
+
+
     </script>
 </body>
 </html>
