@@ -11,6 +11,9 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
 </head>
 <style>
+    label {
+    display: block;
+}
     input::placeholder, select::placeholder {
         font-family: 'Montserrat';
         font-weight: 900;
@@ -111,28 +114,28 @@
             <h2>Cuestionario</h2>
             <form id="registerForm3Form">
                 <input type="hidden" id="userId3" name="userId">
-                <label for="pregunta1">Lorem ipsum dolor sit amet?</label><br>
+                <label for="pregunta1">¿Has practicado Pilates antes?</label><br>
                 <select id="pregunta1" name="pregunta1" required>
                     <option value="">Seleccione</option>
                     <option value="si">Sí</option>
                     <option value="no">No</option>
                 </select><br><br>
 
-                <label for="pregunta2">Lorem ipsum dolor sit amet?</label><br>
+                <label for="pregunta2">¿Tienes alguna lesión o condición médica que debamos conocer?</label><br>
                 <select id="pregunta2" name="pregunta2" required>
                     <option value="">Seleccione</option>
                     <option value="si">Sí</option>
                     <option value="no">No</option>
                 </select><br><br>
 
-                <label for="pregunta3">Lorem ipsum dolor sit amet?</label><br>
+                <label for="pregunta3">¿Realizas ejercicio regularmente (al menos tres veces por semana)?</label><br>
                 <select id="pregunta3" name="pregunta3" required>
                     <option value="">Seleccione</option>
                     <option value="si">Sí</option>
                     <option value="no">No</option>
                 </select><br><br>
 
-                <label for="pregunta4">Lorem ipsum dolor sit amet?</label><br>
+                <label for="pregunta4">¿Sigues alguna dieta o plan de alimentación que debamos tener en cuenta para tu entrenamiento?</label><br>
                 <select id="pregunta4" name="pregunta4" required>
                     <option value="">Seleccione</option>
                     <option value="si">Sí</option>
@@ -144,13 +147,13 @@
         </div>
 
         <div class="form-section-bg" id="registerForm4" style="display: none;">
-            <h2>Información Adicional</h2>
+            <h2>Datos Relevantes</h2>
             <form id="registerForm4Form">
                 <input type="hidden" id="userId4" name="userId">
-                <label for="lesiones">Lesiones:</label>
+                <span>Si tienes alguna condición médica o algo que debamos saber, por favor escríbelo aquí.</span>
                 <textarea id="lesiones" name="lesiones" rows="4" cols="50"></textarea><br><br>
 
-                <label for="motivacion">Motivaciones:</label>
+                <span>Cuéntanos un poco más sobre ti y por qué quieres practicar Pilates.</span>
                 <textarea id="motivacion" name="motivacion" rows="4" cols="50"></textarea><br><br>
 
                 <button type="button" class="button" onclick="submitForm4()">Continuar</button>

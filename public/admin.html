@@ -67,14 +67,27 @@
 
     <script>
         function fetchData(url, options = {}) {
+            const token = localStorage.getItem('token');
+            console.log('Token:', token);  // Verificar si el token está presente
             options.headers = {
                 ...options.headers,
-                'Authorization': 'Bearer ' + localStorage.getItem('token')
+                'Authorization': 'Bearer ' + token
             };
-            return fetch(url, options).then(response => {
-                if (!response.ok) throw response.json().then(error => new Error(error.message));
-                return response.json();
-            });
+            return fetch(url, options)
+                .then(response => {
+                    if (!response.ok) {
+                        if (response.status === 401) {
+                            // Token inválido, redirigir a la página de inicio de sesión
+                            alert('Sesión expirada o no autorizada. Por favor, inicia sesión nuevamente.');
+                            localStorage.removeItem('token');
+                            window.location.href = '/login';
+                        }
+                        return response.json().then(error => {
+                            throw new Error(error.message || 'Error desconocido');
+                        });
+                    }
+                    return response.json();
+                });
         }
 
         function cargarClasesUsuarios() {
