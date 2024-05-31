@@ -13,9 +13,9 @@
     <div id="menu"></div>
     <div class="my-container-bg">
         <div class="container-data">
-            <h1 id="user_name">Bienvenido, [Nombre del Usuario]</h1>
+            <h1 id="user_name">Bienvenid@, [Nombre del Usuario]</h1>
             <a id="logout" href="#" onclick="logout()">Logout</a>
-            <div id="profile_container">
+            <div id="profile-picture-container ">
                 <img id="profile_picture" src="ruta/a/la/foto/de/perfil.jpg" alt="Foto de perfil">
               
             </div>
@@ -24,11 +24,14 @@
 
         <div id="horariosPopup" class="popup">
             <div class="popup-content">
+                <button onclick="cerrarHorariosPopup()" class="close-button">&times;</button>
                 <h2>Horarios Disponibles</h2>
                 <div id="horariosContenido"></div>
-                <button onclick="cerrarHorariosPopup()">Cerrar</button>
             </div>
         </div>
+        
+        
+
         <h2 class="color-ajuste margin-ajuste">Tus Horarios Disponibles</h2>
         <div id="clases_disponibles"></div>
 
@@ -45,13 +48,21 @@
 
         <div id="reservaPopup" class="popup">
             <div class="popup-content">
+                <button onclick="cerrarPopup()" class="close-button">&times;</button>
                 <h2 class="color-ajuste">Reservar Clase</h2>
                 <input type="hidden" id="claseId">
                 <p class="color-ajuste">Detalles de la clase y opciones para confirmar la reserva.</p>
-                <button onclick="cerrarPopup()">Cerrar</button>
-                <button id="confirmarReservaBtn" onclick="confirmarReserva()">Reservar Clase Ahora</button>
+                
+                <div class="checkbox-container">
+                    <input type="checkbox" id="aceptoTerminos" required>
+                    <label for="aceptoTerminos">Acepto <a href="#" target="_blank">términos y condiciones</a></label>
+                </div>
+                
+                <button class="my-button-reservas" onclick="cerrarPopup()">Cerrar</button>
+                <button id="confirmarReservaBtn" class="my-button-reservas" onclick="confirmarReserva()">Reservar Clase Ahora</button>
             </div>
         </div>
+        
         
 
        
@@ -154,40 +165,64 @@ function inicializarCalendario() {
         function cargarNombreUsuario() {
             fetchData('/perfil/usuario')
                 .then(usuario => {
-                    document.getElementById('user_name').textContent = `Bienvenido, ${usuario.nombre}`;
+                    document.getElementById('user_name').textContent = `Bienvenid@, ${usuario.nombre}`;
                     document.getElementById('profile_picture').src = usuario.foto_perfil;
                 })
                 .catch(error => console.error('Error al cargar el nombre del usuario:', error));
         }
 
         function cargarProximasClases() {
-            fetchData('/perfil/proximas-clases')
-                .then(clases => {
-                    const proximasClasesDiv = document.getElementById('proximas_clases');
-                    proximasClasesDiv.innerHTML = clases.length === 0 
-                        ? '<p>No tienes clases reservadas.</p>' 
-                        : clases.map(clase => {
-                            const fechaClase = new Date(clase.fecha_hora);
-                            const diaSemana = fechaClase.toLocaleDateString('es-ES', { weekday: 'long' });
-                            const fechaFormateada = `${diaSemana} ${fechaClase.toLocaleDateString('es-ES')} ${fechaClase.toLocaleTimeString('es-ES', { hour: '2-digit', minute: '2-digit' })}`;
-                            return `<div>Fecha: ${fechaFormateada} <button onclick="reagendarClase(${clase.id})">Reagendar Clase</button></div>`;
-                        }).join('');
-                })
-                .catch(error => console.error('Error al cargar las próximas clases:', error));
-        }
+    fetchData('/perfil/proximas-clases')
+        .then(clases => {
+            const proximasClasesDiv = document.getElementById('proximas_clases');
+            proximasClasesDiv.innerHTML = clases.length === 0 
+                ? '<p>No tienes clases reservadas.</p>' 
+                : clases.map(clase => {
+                    const fechaClase = new Date(clase.fecha_hora);
+                    const diaSemana = fechaClase.toLocaleDateString('es-ES', { weekday: 'long' });
+                    const fechaFormateada = `${diaSemana} ${fechaClase.toLocaleDateString('es-ES')} ${fechaClase.toLocaleTimeString('es-ES', { hour: '2-digit', minute: '2-digit' })}`;
+                    return `<div>Fecha: ${fechaFormateada} <button class="my-button-reservas-2" onclick="reagendarClase(${clase.id})">Reagendar Clase</button></div>`;
+                }).join('');
+        })
+        .catch(error => console.error('Error al cargar las próximas clases:', error));
+}
+
 
         function cargarHorarios(fecha) {
     fetchData(`/perfil/horarios?fecha=${fecha}`)
         .then(clases => {
             const horariosContenido = document.getElementById('horariosContenido');
             horariosContenido.innerHTML = clases.map(clase => {
-                const fechaClase = new Date(clase.fecha_hora).toLocaleString();
-                return `<div>Horario: ${fechaClase} - Cupos Disponibles: ${clase.cupos_disponibles} <button onclick="reservarCupo(${clase.id}, '${fechaClase}')">Reservar Cupo</button></div>`;
+                const fechaClase = new Date(clase.fecha_hora);
+                const diaSemana = fechaClase.toLocaleDateString('es-ES', { weekday: 'long' });
+                const fechaFormateada = `${diaSemana} ${fechaClase.toLocaleDateString('es-ES')} ${fechaClase.toLocaleTimeString('es-ES')}`;
+                return `
+                    <div class="fecha-container">
+                        <div>Fecha: <span class="fecha">${fechaFormateada}</span></div>
+                        <div>Cupos disponibles: ${clase.cupos_disponibles}</div>
+                        <button class="my-button-reservas" onclick="reservarCupo(${clase.id}, '${fechaFormateada}')">Reservar Cupo</button>
+                    </div>
+                `;
             }).join('');
             document.getElementById('horariosPopup').classList.add('active');
         })
         .catch(error => console.error('Error al cargar los horarios:', error));
 }
+
+function cerrarHorariosPopup() {
+    document.getElementById('horariosPopup').classList.remove('active');
+}
+
+
+function cerrarHorariosPopup() {
+    document.getElementById('horariosPopup').classList.remove('active');
+}
+
+
+function cerrarHorariosPopup() {
+    document.getElementById('horariosPopup').classList.remove('active');
+}
+
 
 function cerrarHorariosPopup() {
     document.getElementById('horariosPopup').classList.remove('active');
@@ -484,7 +519,7 @@ function cerrarReagendarPopup() {
 document.addEventListener('DOMContentLoaded', () => {
     const header = document.createElement('div');
     header.classList.add('toggle-header');
-    header.textContent = 'Ver/ocultar próximas clases';
+    header.textContent = 'Ocultar próximas clases';
     header.onclick = toggleProximasClases;
 
     const proximasClasesContainer = document.getElementById('proximas_clases');

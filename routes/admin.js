@@ -1,10 +1,10 @@
 const express = require('express');
 const router = express.Router();
 const db = require('../database');
-const { verifyToken } = require('../middleware/auth');
+// const { verifyToken } = require('../middleware/auth');
 
 // Obtener clases y usuarios por día
-router.get('/clases-usuarios', verifyToken, async (req, res) => {
+router.get('/clases-usuarios', /*verifyToken,*/ async (req, res) => {
     const { fecha } = req.query;
 
     const queryClases = `
@@ -33,11 +33,12 @@ router.get('/clases-usuarios', verifyToken, async (req, res) => {
         res.json(clasesConUsuarios);
     } catch (error) {
         console.error('Error al obtener clases y usuarios:', error);
-        res.status(500).send({ message: 'Error en el servidor', error: error.message });
+        res.status(500).json({ message: 'Error en el servidor', error: error.message });
     }
 });
+
 // Nueva ruta para obtener todos los usuarios
-router.get('/usuarios', verifyToken, async (req, res) => {
+router.get('/usuarios', /*verifyToken,*/ async (req, res) => {
     const queryUsuarios = `
         SELECT id, nombre, email, password, fecha_registro, foto_perfil, paquete, clases_disponibles, telefono, lesiones, motivacion, pregunta1, pregunta2, pregunta3, pregunta4, fecha_nacimiento, genero, comprobante_pago, rol
         FROM Usuarios
@@ -48,12 +49,12 @@ router.get('/usuarios', verifyToken, async (req, res) => {
         res.json(usuarios);
     } catch (error) {
         console.error('Error al obtener usuarios:', error);
-        res.status(500).send({ message: 'Error en el servidor', error: error.message });
+        res.status(500).json({ message: 'Error en el servidor', error: error.message });
     }
 });
 
 // Nueva ruta para actualizar los usuarios
-router.post('/actualizar-usuarios', verifyToken, async (req, res) => {
+router.post('/actualizar-usuarios', /*verifyToken,*/ async (req, res) => {
     const { cambios } = req.body;
 
     const updateQueries = cambios.map(cambio => {
@@ -65,10 +66,8 @@ router.post('/actualizar-usuarios', verifyToken, async (req, res) => {
         res.status(200).send({ message: 'Usuarios actualizados correctamente' });
     } catch (error) {
         console.error('Error al actualizar usuarios:', error);
-        res.status(500).send({ message: 'Error en el servidor', error: error.message });
+        res.status(500).json({ message: 'Error en el servidor', error: error.message });
     }
 });
-
-
 
 module.exports = router;

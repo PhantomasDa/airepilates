@@ -21,6 +21,9 @@
             max-width: 100px;
             max-height: 100px;
         }
+        .container-bg{
+            margin: 40px;
+        }
     </style>
     <link rel="stylesheet" href="style/style.css">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;700;800&display=swap">
@@ -28,42 +31,48 @@
 </head>
 <body>
     <div id="menu"></div>
-    <h1>Panel de Administración</h1>
-    <input type="date" id="fecha_clases" />
-    <button onclick="cargarClasesUsuarios()">Cargar Clases</button>
-    <div id="clases_usuarios"></div>
-
-    <h2>Usuarios</h2>
-    <div id="filtros">
-        <h3>Selecciona los campos a mostrar:</h3>
-        <div style="display: block;">
-            <input type="checkbox" value="nombre" checked> <span>Nombre</span>
-            <input type="checkbox" value="email" checked> Email
-            <input type="checkbox" value="fecha_registro"> Fecha Registro
-            <input type="checkbox" value="paquete"> Paquete
-            <input type="checkbox" value="clases_disponibles"> Clases Disponibles
-            <input type="checkbox" value="telefono"> Teléfono
-            <input type="checkbox" value="motivacion"> Motivación
-            <input type="checkbox" value="fecha_nacimiento"> Fecha Nacimiento
-            <input type="checkbox" value="genero"> Género
-            <input type="checkbox" value="comprobante_pago"> Comprobante Pago
-            <input type="checkbox" value="rol"> Rol
+    <div class="container-bg">
+        <h1>Panel de Administración</h1>
+        <input type="date" id="fecha_clases" />
+        <button onclick="cargarClasesUsuarios()">Cargar Clases</button>
+        <div id="clases_usuarios"></div>
+    
+        <h2>Usuarios</h2>
+        <div id="filtros">
+            <h3>Selecciona los campos a mostrar:</h3>
+            <div style="display: block;">
+                <input type="checkbox" value="nombre" checked> <span>Nombre</span>
+                <input type="checkbox" value="email" checked> Email
+                <input type="checkbox" value="fecha_registro"> Fecha Registro
+                <input type="checkbox" value="paquete"> Paquete
+                <input type="checkbox" value="clases_disponibles"> Clases Disponibles
+                <input type="checkbox" value="telefono"> Teléfono
+                <input type="checkbox" value="motivacion"> Motivación
+                <input type="checkbox" value="fecha_nacimiento"> Fecha Nacimiento
+                <input type="checkbox" value="genero"> Género
+                <input type="checkbox" value="comprobante_pago"> Comprobante Pago
+                <input type="checkbox" value="rol"> Rol
+            </div>
         </div>
+        <button onclick="cargarUsuarios()">Cargar Usuarios</button>
+        <div id="usuarios">
+            <table id="tabla_usuarios">
+                <thead>
+                    <tr id="tabla_cabecera">
+                        <!-- Aquí se insertarán los encabezados de la tabla -->
+                    </tr>
+                </thead>
+                <tbody>
+                    <!-- Aquí se insertarán las filas de usuarios -->
+                </tbody>
+            </table>
+            <button onclick="guardarCambiosUsuarios()">Guardar Cambios</button>
+        </div>
+
     </div>
-    <button onclick="cargarUsuarios()">Cargar Usuarios</button>
-    <div id="usuarios">
-        <table id="tabla_usuarios">
-            <thead>
-                <tr id="tabla_cabecera">
-                    <!-- Aquí se insertarán los encabezados de la tabla -->
-                </tr>
-            </thead>
-            <tbody>
-                <!-- Aquí se insertarán las filas de usuarios -->
-            </tbody>
-        </table>
-        <button onclick="guardarCambiosUsuarios()">Guardar Cambios</button>
-    </div>
+    
+
+    <div id="footer"></div>
 
     <script>
         function fetchData(url, options = {}) {
@@ -91,42 +100,43 @@
         }
 
         function cargarClasesUsuarios() {
-            const fecha = document.getElementById('fecha_clases').value;
-            fetchData(`/admin/clases-usuarios?fecha=${fecha}`)
-                .then(clasesConUsuarios => {
-                    const contenedor = document.getElementById('clases_usuarios');
-                    contenedor.innerHTML = clasesConUsuarios.map(clase => {
-                        return `
-                            <div class="class-container">
-                                <h2>Clase: ${new Date(clase.fecha_hora).toLocaleString()}</h2>
-                                <p>Cupos Disponibles: ${clase.cupos_disponibles}</p>
-                                <table>
-                                    <thead>
-                                        <tr>
-                                            <th>Nombre</th>
-                                            <th>Email</th>
-                                            <th>Teléfono</th>
-                                            <th>Asistencia</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        ${clase.usuarios.map(usuario => `
-                                            <tr>
-                                                <td>${usuario.nombre}</td>
-                                                <td>${usuario.email}</td>
-                                                <td>${usuario.telefono}</td>
-                                                <td><input type="checkbox" name="asistencia_${usuario.id}" data-usuario-id="${usuario.id}" data-clase-id="${clase.id}"></td>
-                                            </tr>
-                                        `).join('')}
-                                    </tbody>
-                                </table>
-                                <button onclick="enviarAsistencia(${clase.id})">Enviar Asistencia</button>
-                            </div>
-                        `;
-                    }).join('');
-                })
-                .catch(error => console.error('Error al cargar clases y usuarios:', error));
-        }
+    const fecha = document.getElementById('fecha_clases').value;
+    fetchData(`/admin/clases-usuarios?fecha=${fecha}`)
+        .then(clasesConUsuarios => {
+            const contenedor = document.getElementById('clases_usuarios');
+            contenedor.innerHTML = clasesConUsuarios.map(clase => {
+                return `
+                    <div class="class-container">
+                        <h2>Clase: ${new Date(clase.fecha_hora).toLocaleString()}</h2>
+                        <p>Cupos Disponibles: ${clase.cupos_disponibles}</p>
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Nombre</th>
+                                    <th>Email</th>
+                                    <th>Teléfono</th>
+                                    <th>Asistencia</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                ${clase.usuarios.map(usuario => `
+                                    <tr>
+                                        <td>${usuario.nombre}</td>
+                                        <td>${usuario.email}</td>
+                                        <td>${usuario.telefono}</td>
+                                        <td><input type="checkbox" name="asistencia_${usuario.id}" data-usuario-id="${usuario.id}" data-clase-id="${clase.id}"></td>
+                                    </tr>
+                                `).join('')}
+                            </tbody>
+                        </table>
+                        <button onclick="enviarAsistencia(${clase.id})">Enviar Asistencia</button>
+                    </div>
+                `;
+            }).join('');
+        })
+        .catch(error => console.error('Error al cargar clases y usuarios:', error));
+}
+
 
         function cargarUsuarios() {
             const selectedFields = Array.from(document.querySelectorAll('#filtros input[type=checkbox]:checked'))

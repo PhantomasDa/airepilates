@@ -59,6 +59,22 @@
   margin-left: 30px;
     text-align: center;
 }
+/* Estilos generales para el campo de fecha */
+input[type="date"] {
+    width: 100%;
+    padding: 10px;
+    margin: 5px 0;
+    box-sizing: border-box;
+    font-size: 16px;
+}
+
+/* Estilos específicos para dispositivos móviles */
+@media (max-width: 600px) {
+    input[type="date"] {
+        font-size: 14px;
+    }
+}
+
 
 
 </style>
@@ -66,7 +82,7 @@
     <div id="menu"></div>
     <div class="my-container-bg">
         <div class="form-section-bg" id="registerForm1">
-            <h2 style="margin: 0;">Registro de Usuario</h2>
+            <h2 style="margin: 50px 10px 30px 10px;">Registro de Usuario</h2>
             <form id="registerForm1Form">
                 <input type="text" id="nombre" name="nombre" placeholder=" Nombre"  required><br>
                 <span id="nombreError" class="error"></span><br>
@@ -82,9 +98,14 @@
 
                 <input type="password" id="confirm_password" name="confirm_password" placeholder="Confirmar clave"  required><br>
                     <span id="confirmPasswordError" class="error"></span><br>
-                
-                <input type="date" id="fecha_nacimiento" name="fecha_nacimiento" required><br>
-                <span id="fechaNacimientoError" class="error"></span><br>
+         
+                    
+
+                    <label for="fecha_nacimiento">Fecha de Nacimiento:</label>
+                        <input type="date" id="fecha_nacimiento" name="fecha_nacimiento" required><br>
+                        <span id="fechaNacimientoError" class="error"></span><br>
+
+
             
                 <select id="genero" name="genero" required>
                     <option value=""> Genero</option>

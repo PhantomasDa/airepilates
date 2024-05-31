@@ -703,12 +703,12 @@ input[type="date"]::before {
 
 /* Estilos para el botón */
 .button {
-    width: 100%;
+    width: 80%;
     padding: 10px;
     background-color: #7F5B41;
     color: white;
     border: none;
-    border-radius: 30px;
+    border-radius: 10px;
     cursor: pointer;
     font-weight: 700;
     font-size: 16px;
