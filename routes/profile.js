@@ -217,7 +217,8 @@ router.post('/reservar', verifyToken, async (req, res) => {
                 [req.user.id]
             );
 
-            res.json({ message: 'Reserva confirmada' });
+            // Enviar la fecha de la clase en la respuesta
+            res.json({ message: 'Reserva confirmada', fecha: claseData[0].fecha_hora });
         } else {
             res.status(400).send({ message: 'No hay cupos disponibles' });
         }
@@ -226,6 +227,7 @@ router.post('/reservar', verifyToken, async (req, res) => {
         res.status(500).send({ message: 'Error en el servidor', error: error.message });
     }
 });
+
 
 // Obtener fechas posibles para reagendar una clase
 router.get('/fechas-reagendar/:claseId', verifyToken, (req, res) => {
