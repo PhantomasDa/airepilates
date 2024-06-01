@@ -186,7 +186,7 @@ body {
     width: 100%;
     height: 100%;
     background-color: #B2987E;
-    z-index: 9999; /* Asegúrate de que este valor sea mayor que el de otros elementos */
+    z-index: 999999; /* Asegúrate de que este valor sea mayor que el de otros elementos */
     overflow: hidden;
     transition: left 1s ease-in-out; /* Cambia el tiempo de transición a 1 segundo */
 }

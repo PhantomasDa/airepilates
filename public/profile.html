@@ -30,8 +30,9 @@
             </div>
         </div>
 
-        <h2 class="color-ajuste margin-ajuste">Tus Horarios Disponibles</h2>
+    
         <div id="clases_disponibles"></div>
+        <h2 class="color-ajuste margin-ajuste">Tus Horarios Disponibles</h2>
 
         <div id="calendario" class="calendar-container"></div>
         <h2 class="color-ajuste">Tus Próximas Clases</h2>
@@ -49,9 +50,10 @@
                     <label for="aceptoTerminos">Acepto <a href="#" target="_blank">términos y condiciones</a></label>
                 </div>
                 <button class="my-button-reservas" onclick="cerrarPopup()">Cerrar</button>
-                <button class="my-button-reservas-2" onclick="mostrarReservaPopup(${clase.id})">Reservar Clase</button>
+                <button id="confirmarReservaBtn" class="my-button-reservas" onclick="confirmarReserva()">Reservar Clase Ahora</button>
             </div>
         </div>
+        
         
         <div id="confirmationModal" class="modal">
             <div class="modal-content">

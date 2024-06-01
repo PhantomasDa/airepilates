@@ -42,7 +42,8 @@ function actualizarClasesDisponibles() {
 
 function manejarErrorReserva(error) {
     console.error('Error al reservar la clase:', error);
-    switch (error.message) {
+    const errorMessage = error.message || error;
+    switch (errorMessage) {
         case 'No se pueden reservar clases para fechas anteriores al día siguiente':
             mostrarModal('dateErrorModal');
             break;
@@ -53,12 +54,14 @@ function manejarErrorReserva(error) {
             mostrarModal('errorModal');
             break;
         default:
-            alert('Error al reservar la clase: ' + error.message);
+            alert('Error al reservar la clase: ' + errorMessage);
     }
 }
 
 function confirmarReserva() {
     const claseId = document.getElementById('claseId').value;
+    console.log('Intentando reservar la clase con ID:', claseId); // Agrega esto para depurar
+
     fetchData('/perfil/reservar', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -75,9 +78,11 @@ function confirmarReserva() {
         cerrarPopup();
     })
     .catch(error => {
-        if (error.json) {
+        if (error instanceof Response) {
             error.json().then(errorMessage => {
-                manejarErrorReserva({ message: errorMessage });
+                manejarErrorReserva({ message: errorMessage.message || errorMessage });
+            }).catch(() => {
+                manejarErrorReserva({ message: error.statusText });
             });
         } else {
             manejarErrorReserva({ message: error.message });
@@ -85,9 +90,14 @@ function confirmarReserva() {
     });
 }
 
+
 function mostrarReservaPopup(claseId) {
     document.getElementById('claseId').value = claseId;
     document.getElementById('reservaPopup').style.display = 'block';
+}
+
+function reservarCupo(claseId) {
+    mostrarReservaPopup(claseId);
 }
 
 function toggleProximasClases() {
