@@ -62,6 +62,7 @@ if (!fs.existsSync(uploadsDir)) {
     fs.mkdirSync(uploadsDir);
 }
 
+app.use('/profile', profileRouter); // Montar las rutas de profile
 
 // Rutas
 app.use('/perfil', profileRouter);

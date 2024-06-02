@@ -114,3 +114,36 @@ document.addEventListener('DOMContentLoaded', () => {
     const proximasClasesContainer = document.getElementById('proximas_clases');
     proximasClasesContainer.parentNode.insertBefore(header, proximasClasesContainer);
 });
+
+async function marcarDisponibilidad(start, end) {
+    const month = start.getMonth() + 1;
+    const year = start.getFullYear();
+    try {
+        const response = await fetch(`/profile/disponibilidad-clases?month=${month}&year=${year}`, {
+            headers: {
+                'Authorization': `Bearer ${localStorage.getItem('token')}`
+            }
+        });
+        if (!response.ok) {
+            throw new Error('Error en la solicitud al servidor');
+        }
+        const disponibilidad = await response.json();
+
+        const dias = document.querySelectorAll('.fc-daygrid-day');
+        dias.forEach(dia => {
+            const dateStr = dia.getAttribute('data-date');
+            const fecha = disponibilidad.find(d => d.fecha === dateStr);
+            if (fecha) {
+                if (fecha.cupos_disponibles > 0) {
+                    dia.classList.add('cupos-disponibles');
+                } else {
+                    dia.classList.add('sin-cupos');
+                }
+            } else {
+                dia.classList.add('sin-actividades');
+            }
+        });
+    } catch (error) {
+        console.error('Error obteniendo disponibilidad de clases:', error);
+    }
+}

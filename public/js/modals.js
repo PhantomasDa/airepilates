@@ -36,3 +36,4 @@ function cerrarHorariosPopup() {
 function cerrarReagendarPopup() {
     cerrarModal('reagendarPopup');
 }
+

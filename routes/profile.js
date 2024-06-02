@@ -34,6 +34,7 @@ async function executeQuery(query, params, res, successCallback) {
         res.status(500).send({ message: 'Error en el servidor', error: error.message });
     }
 }
+
 // Obtener información del usuario
 router.get('/usuario', verifyToken, (req, res) => {
     const query = 'SELECT nombre, foto_perfil FROM Usuarios WHERE id = ?';
@@ -49,8 +50,6 @@ router.get('/usuario', verifyToken, (req, res) => {
         }
     });
 });
-
-
 
 // Reagendar clase
 router.post('/reagendar', verifyToken, async (req, res) => {
@@ -132,6 +131,7 @@ router.post('/reagendar', verifyToken, async (req, res) => {
         res.status(500).send({ message: 'Error en el servidor', error: error.message });
     }
 });
+
 // Obtener horarios disponibles filtrados por fecha
 router.get('/horarios', verifyToken, (req, res) => {
     const { fecha } = req.query;
@@ -228,7 +228,6 @@ router.post('/reservar', verifyToken, async (req, res) => {
     }
 });
 
-
 // Obtener fechas posibles para reagendar una clase
 router.get('/fechas-reagendar/:claseId', verifyToken, (req, res) => {
     const { claseId } = req.params;
@@ -244,7 +243,8 @@ router.get('/fechas-reagendar/:claseId', verifyToken, (req, res) => {
         res.json(fechas);
     });
 });
-// Ruta protegida
+
+// Ruta protegida para el perfil
 router.get('/profile', isAuthenticated, (req, res) => {
     res.render('profile', { user: req.session.user });
 });
