@@ -9,5 +9,16 @@
     "jsonwebtoken": "^9.0.2",
     "multer": "^1.4.5-lts.1",
     "mysql2": "^3.9.8"
+  },
+  "devDependencies": {
+    "jest": "^29.7.0",
+    "jest-puppeteer": "^5.0.4",
+    "puppeteer": "^19.11.1"
+  },
+  "scripts": {
+    "test": "jest"
+  },
+  "jest": {
+    "preset": "jest-puppeteer"
   }
 }
